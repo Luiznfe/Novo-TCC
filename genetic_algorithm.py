@@ -48,12 +48,59 @@ class GeneticAlgorithm:
     # Order Crossover Operator (OX)
     # Nesse cado devido a restrição da capacidade do caminhão, todas as rotas precisam ser refeitas.
     def crossover(self, parents):
+        seq_1 = list()
+        seq_2 = list()
+        seq_1 = parents[0].get_sequence()
+        seq_2 = parents[1].get_sequence()
         # sorteando os pontos de corte
-        seq_p1 = []
-        seq_p2 = []
-        seq_p1 = parents[0].get_sequence()
-        seq_p2 = parents[1].get_sequence()
-        print(seq_p1)
+        while True:
+            c_point = random.sample(range(0, len(seq_1)), 2)
+            if 0 not in c_point and c_point[0] != c_point[1]: 
+                break
+        # pontos de corte ordenados
+        print(seq_1)
+        print('-'*20)
+        print(seq_2)
+        print('-'*20)
+        new_seq_1 = self.new_sequence(seq_1, c_point)
+        self.offsring(new_seq_1, seq_2, c_point)
+        # para criar um novo descendente preciso de duas coisas, a sequencia de P1 e de P2 preparada para receber a sequencia
+        
+    
+    def new_sequence(self, seq_1, c_point):
+        new_seq = list()
+        i = c_point[1] + 1
+        while True:
+            if i == len(seq_1):
+                i = 0
+            if i == c_point[0]:
+                break
+            new_seq.append(seq_1[i])
+            i += 1
+    
+    def offsring(self, new_seq, seq_2, c_point):
+        new_o = list()
+        for i in range(len(seq_2)):
+            new_o.append('X')
+        
+        print(new_o)
+        for i in range(c_point[0], c_point[1]):
+            new_o[i] = seq_2[i]
+        
+        print(new_o)
+        i = c_point[1] + 1
+        while True:
+            if i == len(seq_2):
+                i = 0
+            if i == c_point[0]:
+                break
+            if new_seq[-1] not in new_o:
+                new_o[i] = new_seq.pop(0)
+            print(i)
+            i += 1
+        print(new_o)
+
+    
 
         
 
