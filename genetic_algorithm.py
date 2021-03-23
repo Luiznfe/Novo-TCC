@@ -42,63 +42,88 @@ class GeneticAlgorithm:
         # com base no id a solução selecionado é recuperada
         for i in range(2):
             parents.append(pop.get_item(parents_id[i]))
-            
+
         return parents 
 
     # Order Crossover Operator (OX)
     # Nesse cado devido a restrição da capacidade do caminhão, todas as rotas precisam ser refeitas.
     def crossover(self, parents):
-        seq_1 = list()
-        seq_2 = list()
-        seq_1 = parents[0].get_sequence()
-        seq_2 = parents[1].get_sequence()
+        # p1 e p2 recebem a ordem de visitação dos pais
+        p1 = list()
+        p2 = list()
+        p1 = parents[0].get_sequence()
+        p2 = parents[1].get_sequence()
         # sorteando os pontos de corte
         while True:
-            c_point = random.sample(range(0, len(seq_1)), 2)
-            if 0 not in c_point and c_point[0] != c_point[1]: 
+            c_point = random.sample(range(0, len(p1)), 2)
+            c_point.sort()
+            # para garantir uma minima parte herdada
+            if c_point[0] != 0 and c_point[1] != len(p1) - 1: 
                 break
-        # pontos de corte ordenados
-        print(seq_1)
-        print('-'*20)
-        print(seq_2)
-        print('-'*20)
-        new_seq_1 = self.new_sequence(seq_1, c_point)
-        self.offsring(new_seq_1, seq_2, c_point)
-        # para criar um novo descendente preciso de duas coisas, a sequencia de P1 e de P2 preparada para receber a sequencia
+        # REORGANIZAR CASO FOR USAR
+        # print('cut', c_point)
+        # print('p1', p1)
+        # print('p2', p2)
+        # print('seq 1', seq)
+        # print('inhe', in_seq)
+        # ------------------
+        # sequencia 
+        seq = self.cross_sequence(p1, c_point)
+        in_seq = self.inherited_seq(p2, c_point)
+        self.get_offspring(in_seq, seq, c_point)
         
-    
-    def new_sequence(self, seq_1, c_point):
-        new_seq = list()
+    # retorna uma nova sequencia de acordo com os pontos de corte
+    def cross_sequence(self, p1, c_point):
+        # começa do segundo ponto de corte e vai até o primeiro
+        new_seq = []
         i = c_point[1] + 1
         while True:
-            if i == len(seq_1):
+            if i == len(p1):
                 i = 0
-            if i == c_point[0]:
+            if i == c_point[1]:
+                new_seq.append(p1[i])
                 break
-            new_seq.append(seq_1[i])
+            new_seq.append(p1[i])
             i += 1
+        return new_seq
     
-    def offsring(self, new_seq, seq_2, c_point):
-        new_o = list()
-        for i in range(len(seq_2)):
-            new_o.append('X')
-        
-        print(new_o)
-        for i in range(c_point[0], c_point[1]):
-            new_o[i] = seq_2[i]
-        
-        print(new_o)
+    # cria uma nova sequencia e aplica a parte herdada do pai2
+    def inherited_seq(self, p2, c_point):
+        in_seq = []
+        # o array é inicializado com X
+        for i in range(len(p2)):
+            in_seq.append('X')
+        # o array então rece a parte herada 
+        for i in range(c_point[0], c_point[1] + 1):
+            in_seq[i] = p2[i]
+        return in_seq
+    
+    # o filho recebe a parte herada do p1
+    def get_offspring(self, in_seq, new_seq, c_point):
+        self.remove_repeated(in_seq, new_seq)
         i = c_point[1] + 1
         while True:
-            if i == len(seq_2):
-                i = 0
-            if i == c_point[0]:
+            if len(new_seq) == 0:
                 break
-            if new_seq[-1] not in new_o:
-                new_o[i] = new_seq.pop(0)
-            print(i)
+            if i == len(in_seq):
+                i = 0
+            in_seq[i] = new_seq.pop(0)
             i += 1
-        print(new_o)
+        print('off', in_seq)
+    
+    # remove os valores repetidos de duas listas
+    def remove_repeated(self, in_seq, new_seq):
+        for i in in_seq:
+            if i in new_seq:
+                new_seq.remove(i)
+        
+                
+
+
+
+
+            
+        
 
     
 

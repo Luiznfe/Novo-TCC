@@ -48,7 +48,7 @@ class Solution:
     def set_fitness(self, value):
         self.fitness = value
     
-    # retorna a ordem de visitação da solução
+    # retorna uma lista com apenas ids dos clientes sem o depósito
     def get_sequence(self):
         seq = list()
         for vehicle in self.vehicle_list:
