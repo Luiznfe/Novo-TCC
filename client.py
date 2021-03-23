@@ -5,6 +5,9 @@ class Client:
         self.pickup = pickup
         self.delivery = delivery
     
+    def __repr__(self):
+        return '{}, {}, {}'.format(self.id, self.pickup, self.delivery)
+    
     def get_id(self):
         return self.id
     

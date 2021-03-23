@@ -14,7 +14,6 @@ g.fitness_function(p)
 print('Parents','-'*20)
 parents = []
 parents = g.tournamet_selection(p, 3)
-print(type(parents[0]))
-# g.crossover(parents)
+g.crossover(parents, p)
 # print(parent)
 

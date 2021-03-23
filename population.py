@@ -7,6 +7,7 @@ class Population:
     def __init__(self, size):
         self.pop = list()
         self.size = size
+        self.last_id = size + 1
     
     # gera um população inicial com base to no tamanho passado
     # todas as soluções sao geradas de forma aleatória
@@ -18,10 +19,19 @@ class Population:
             s.random_client_list()
             s.initial_solution()
             self.pop.append(s)
-    
+
     # retorna a populacao
     def get_population(self):
         return self.pop
+    
+    # retorna o ultimo id que pode ser usado
+    def get_last_id(self):
+        return self.last_id
+
+    # adiciona uma solução a populacao e incrementa o últmo id
+    def add_solution(self, new_p):
+        self.pop.append(new_p)
+        self.last_id += 1
 
     # ordena a populacao de forma reversa
     def reverse_sorted(self):
@@ -43,6 +53,7 @@ class Population:
             if s.get_id() == id_s:
                 return s
     
+    
     def sort_dictionary(self, dic):
         return sorted(dic.items(), key=lambda item: item[1])
 
@@ -50,6 +61,24 @@ class Population:
     def print_population(self):
         for s in self.pop:
             print(f'{s.get_id()}, {s.get_distance()} {s.get_fitness()}')
+    
+    def get_client(self, id):
+        clients = self.pop[0].get_clientList()
+        for c in clients:
+            if c.get_id() == id:
+                return c
+    
+    def get_new_client_list(self, c_list):
+        aux = list()
+        for i in c_list:
+            aux.append(self.get_client(i))
+        return aux
+
+    
+
+
+
+
     
     
 if __name__ == '__main__':

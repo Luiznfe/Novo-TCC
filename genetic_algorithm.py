@@ -1,3 +1,4 @@
+from solution import Solution
 import random
 import copy
 
@@ -42,12 +43,11 @@ class GeneticAlgorithm:
         # com base no id a solução selecionado é recuperada
         for i in range(2):
             parents.append(pop.get_item(parents_id[i]))
-
         return parents 
 
     # Order Crossover Operator (OX)
     # Nesse cado devido a restrição da capacidade do caminhão, todas as rotas precisam ser refeitas.
-    def crossover(self, parents):
+    def crossover(self, parents, pop):
         # p1 e p2 recebem a ordem de visitação dos pais
         p1 = list()
         p2 = list()
@@ -60,17 +60,54 @@ class GeneticAlgorithm:
             # para garantir uma minima parte herdada
             if c_point[0] != 0 and c_point[1] != len(p1) - 1: 
                 break
+        
+        # uma base é criada para os filhos (copia parcial do pai)
+        offsprings = list()
+        offsprings.append(self.get_offspring(p1, p2, c_point, pop))
+        offsprings.append(self.get_offspring(p2, p1, c_point, pop))
+        for i in offsprings:
+            print(i)
+
+
+
         # REORGANIZAR CASO FOR USAR
         # print('cut', c_point)
         # print('p1', p1)
         # print('p2', p2)
         # print('seq 1', seq)
-        # print('inhe', in_seq)
+        # print('seq 2', seq_2)
+        # print(' ')
+        # print('inhe', in_seq_2)
         # ------------------
-        # sequencia 
+
+    
+    def get_offspring(self, p1, p2, c_point, pop):
+        seq = list()
+        seq_off = list()
+        off_list = list()
+        # seq recebe a sequencia de visitacao de p1
         seq = self.cross_sequence(p1, c_point)
-        in_seq = self.inherited_seq(p2, c_point)
-        self.get_offspring(in_seq, seq, c_point)
+        # seq_off recebe a parte herdade de p2
+        seq_off = self.inherited_seq(p2, c_point)
+        # seq_off recebe a parte herdade de p1
+        self.offspring_seq(seq_off, seq, c_point)
+        # a lista com os clientes reais é recuperada 
+        off_list = pop.get_new_client_list(seq_off)
+        try:
+            # uma base para o filho é criada
+            off = copy.deepcopy(pop.get_population()[0])
+            # solucao resetada, lista de clientes e veículos limpa
+            off.reset_solution()
+            # nova solução criada a partir da nova lista de veiculos
+            off.set_id(pop.get_last_id())
+            off.set_client_list(off_list)
+            off.initial_solution()
+            # o filho criado é adicionado a população
+            pop.add_solution(off)
+            return off
+        except :
+            print('offspring error')
+
         
     # retorna uma nova sequencia de acordo com os pontos de corte
     def cross_sequence(self, p1, c_point):
@@ -99,7 +136,7 @@ class GeneticAlgorithm:
         return in_seq
     
     # o filho recebe a parte herada do p1
-    def get_offspring(self, in_seq, new_seq, c_point):
+    def offspring_seq(self, in_seq, new_seq, c_point):
         self.remove_repeated(in_seq, new_seq)
         i = c_point[1] + 1
         while True:
@@ -109,7 +146,8 @@ class GeneticAlgorithm:
                 i = 0
             in_seq[i] = new_seq.pop(0)
             i += 1
-        print('off', in_seq)
+        # print('off', in_seq)
+        
     
     # remove os valores repetidos de duas listas
     def remove_repeated(self, in_seq, new_seq):

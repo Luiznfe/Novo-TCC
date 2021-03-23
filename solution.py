@@ -24,7 +24,7 @@ class Solution:
         return self.vehicle_list[:]
     
     def get_clientList(self):
-        return self.vehicle_list[:]
+        return self.client_list[:]
     
     def get_adj_matrix(self):
         return self.adj_matrix
@@ -38,13 +38,28 @@ class Solution:
     def get_fitness(self):
         return self.fitness
     
+    def set_client_list(self, c_list):
+        self.client_list = c_list[:]
+    
+    def reset_solution(self):
+        self.vehicle_list.clear()
+        self.client_list.clear()
+        self.dist = 0
+        self.fitness = 0
+
+    #  incrementa a distancia total
     def total_distance(self, dist):
         self.dist += dist
     
     # gera uma lista de clientes random
     def random_client_list(self):
         random.shuffle(self.client_list)
+    
+    # set novo id
+    def set_id(self, new_id):
+        self.id_solution = new_id
 
+    # set fitness
     def set_fitness(self, value):
         self.fitness = value
     
