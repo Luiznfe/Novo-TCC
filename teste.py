@@ -1,2 +1,3 @@
-lista = [i in for i in range(10)]
-print(lista)
+import random
+import numpy as np
+import time

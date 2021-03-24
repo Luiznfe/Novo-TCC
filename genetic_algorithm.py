@@ -1,6 +1,7 @@
 from solution import Solution
 import random
 import copy
+import funcs
 
 class GeneticAlgorithm:
 
@@ -46,6 +47,7 @@ class GeneticAlgorithm:
         return parents 
 
     # Order Crossover Operator (OX)
+    # Acontece com uma alta probabilidade
     # Nesse cado devido a restrição da capacidade do caminhão, todas as rotas precisam ser refeitas.
     def crossover(self, parents, pop):
         # p1 e p2 recebem a ordem de visitação dos pais
@@ -65,20 +67,7 @@ class GeneticAlgorithm:
         offsprings = list()
         offsprings.append(self.get_offspring(p1, p2, c_point, pop))
         offsprings.append(self.get_offspring(p2, p1, c_point, pop))
-        for i in offsprings:
-            print(i)
 
-
-
-        # REORGANIZAR CASO FOR USAR
-        # print('cut', c_point)
-        # print('p1', p1)
-        # print('p2', p2)
-        # print('seq 1', seq)
-        # print('seq 2', seq_2)
-        # print(' ')
-        # print('inhe', in_seq_2)
-        # ------------------
 
     
     def get_offspring(self, p1, p2, c_point, pop):
@@ -92,21 +81,12 @@ class GeneticAlgorithm:
         # seq_off recebe a parte herdade de p1
         self.offspring_seq(seq_off, seq, c_point)
         # a lista com os clientes reais é recuperada 
-        off_list = pop.get_new_client_list(seq_off)
-        try:
-            # uma base para o filho é criada
-            off = copy.deepcopy(pop.get_population()[0])
-            # solucao resetada, lista de clientes e veículos limpa
-            off.reset_solution()
-            # nova solução criada a partir da nova lista de veiculos
-            off.set_id(pop.get_last_id())
-            off.set_client_list(off_list)
-            off.initial_solution()
-            # o filho criado é adicionado a população
-            pop.add_solution(off)
-            return off
-        except :
-            print('offspring error')
+        aux = pop.get_population()[0]
+        off_list = aux.get_new_client_list(seq_off)
+        # uma nova solução "filho" é criada e adicionada a populacao
+        off = pop.new_solution(off_list)
+        pop.add_solution(off)
+        return off
 
         
     # retorna uma nova sequencia de acordo com os pontos de corte
@@ -154,7 +134,15 @@ class GeneticAlgorithm:
         for i in in_seq:
             if i in new_seq:
                 new_seq.remove(i)
+
+    # Mutation
+    def mutation(self, pop, prob):
+  
+
         
+       
+
+
                 
 
 

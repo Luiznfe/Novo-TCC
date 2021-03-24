@@ -120,6 +120,22 @@ class Solution:
             id += 1
             # print(f'distacia percorrida {v.get_distance()}')
     
+    # retorna um cliente com base no id
+    def get_client(self, id):
+        clients = self.client_list
+        for c in clients:
+            if c.get_id() == id:
+                return c
+    
+    # retorna clientes com base em uma lista de ids passados
+    def get_new_client_list(self, c_list):
+        aux = list()
+        for i in c_list:
+            aux.append(self.get_client(i))
+        return aux
+    
+
+        
     
 
                 

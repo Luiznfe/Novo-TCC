@@ -1,7 +1,7 @@
 from operator import attrgetter, itemgetter
 from solution import Solution
 from read import Read
-from read import Read
+import copy
 class Population:
 
     def __init__(self, size):
@@ -61,21 +61,16 @@ class Population:
     def print_population(self):
         for s in self.pop:
             print(f'{s.get_id()}, {s.get_distance()} {s.get_fitness()}')
-    
-    def get_client(self, id):
-        clients = self.pop[0].get_clientList()
-        for c in clients:
-            if c.get_id() == id:
-                return c
-    
-    def get_new_client_list(self, c_list):
-        aux = list()
-        for i in c_list:
-            aux.append(self.get_client(i))
-        return aux
 
-    
-
+    def new_solution(self, client_list):
+        try:
+            aux = self.pop[0]
+            new_s = Solution(None, aux.get_adj_matrix(), aux.get_capacity(), self.last_id)
+            new_s.set_client_list(client_list)
+            new_s.initial_solution()
+            return new_s
+        except :
+            print('offspring error')
 
 
 

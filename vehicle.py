@@ -7,6 +7,9 @@ class Vehicle:
         self.distance = 0
         self.load = 0
     
+    def __repr__(self):
+        return '{}, {}'.format(self.id, self.distance)
+    
     def get_id(self):
         return self.id
     
@@ -57,6 +60,7 @@ class Vehicle:
         for i in self.route:
             seq.append(i.get_id())
         return seq
+
         
     
     def print_vehicle(self):
