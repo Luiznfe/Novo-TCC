@@ -33,6 +33,14 @@ class Population:
         self.pop.append(new_p)
         self.last_id += 1
 
+    def remove_solution(self, s_id):
+        try:
+            for a in self.pop:
+                if a.get_id() == s_id:
+                    self.pop.remove(a)
+        except Exception:
+            print('remove solution error')
+
     # ordena a populacao de forma reversa
     def reverse_sorted(self):
         self.pop.sort(key=attrgetter('dist'), reverse=True)
@@ -48,6 +56,12 @@ class Population:
             pop_dic[s.get_id()] = s.get_fitness()
         return pop_dic
     
+    def get_pop_age(self):
+        pop_dic = dict()
+        for s in self.pop:
+            pop_dic[s.get_id()] = s.get_age()
+        return pop_dic
+    
     def get_item(self, id_s):
         for s in self.pop:
             if s.get_id() == id_s:
@@ -60,7 +74,7 @@ class Population:
 
     def print_population(self):
         for s in self.pop:
-            print(f'{s.get_id()}, {s.get_distance()} {s.get_fitness()}')
+            print(f'{s.get_id()}, {s.get_distance()} {s.get_fitness()}, {s.get_age()}')
 
     def new_solution(self, client_list):
         try:
@@ -71,6 +85,12 @@ class Population:
             return new_s
         except :
             print('offspring error')
+    
+    def new_age(self):
+        for i in self.pop:
+            i.plus_age()
+    
+
 
 
 
@@ -81,7 +101,9 @@ if __name__ == '__main__':
     p = Population(3)
     p.new_population('c0530.txt')
     p.print_population()
-    p.reverse_sorted()
+    # p.reverse_sorted()
+    p.remove_solution(1)
+    p.print_population()
 
 
   

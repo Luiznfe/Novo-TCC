@@ -50,6 +50,7 @@ class GeneticAlgorithm:
     # Acontece com uma alta probabilidade
     # Nesse cado devido a restrição da capacidade do caminhão, todas as rotas precisam ser refeitas.
     def crossover(self, parents, pop):
+        pop.new_age()
         # p1 e p2 recebem a ordem de visitação dos pais
         p1 = list()
         p2 = list()
@@ -136,7 +137,28 @@ class GeneticAlgorithm:
                 new_seq.remove(i)
 
     # Mutation
-    def mutation(self, pop, prob):
+    # Ainda preciso verificar
+    def mutation(self, pop):
+        number = 2
+        sel = random.sample(range(0, len(pop.get_population())), 2)
+        if number in sel:
+            s = random.sample(pop.get_population(), 1)
+            funcs.scramble(s)
+            funcs.inversion(s)
+            funcs.swap(s)
+        print('mutation')
+    
+    # Seleciona os sobreviventes da população
+    def survivior_selection(self, pop):
+        dict_age = dict()
+        dict_age = pop.get_pop_age()
+        dict_age = sorted(dict_age.items(), key=lambda item: item[1])
+        for i in range(2):
+            pop.remove_solution(dict_age[-1][0])
+            dict_age.pop()
+
+
+
   
 
         

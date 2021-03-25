@@ -13,9 +13,16 @@ class Solution:
         self.cap = cap  # capacidade de cada carro da frota
         self.dist = 0  # distancia percorrida pela frota
         self.fitness = 0 # fitness da solução
+        self.age = 0
     
     def __repr__(self):
-        return '{}, {}, {}'.format(self.id_solution, self.dist, self.fitness)
+        return '{}, {}, {}, age {}'.format(self.id_solution, self.dist, self.fitness, self.age)
+
+    def get_age(self):
+        return self.age
+    
+    def plus_age(self):
+        self.age += 1
     
     def get_id(self):
         return self.id_solution

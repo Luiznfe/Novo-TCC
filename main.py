@@ -6,19 +6,22 @@ from population import Population
 import funcs 
 from read import Read
 
-p = Population(10)
+p = Population(30)
 p.new_population('c0530.txt')
 
 g = GeneticAlgorithm()
 g.fitness_function(p)
-# p.print_population()
-print('Parents','-'*20)
+print('Inicial Pop','-'*20)
+p.print_population()
+print('-'*20)
 parents = []
 parents = g.tournamet_selection(p, 3)
-g.mutation(pop, 10)
-# g.crossover(parents, p)
-# print(parents[0])
-
-# funcs.inversion(parents[0])
-# print(parents[0])
-
+g.crossover(parents, p)
+print('Cross','-'*20)
+p.print_population()
+print('-'*20)
+g.mutation(p)
+g.survivior_selection(p)
+print('Pop','-'*20)
+p.print_population()
+print('-'*20)
