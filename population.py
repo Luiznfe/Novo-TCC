@@ -1,6 +1,7 @@
 from operator import attrgetter, itemgetter
 from solution import Solution
 from read import Read
+import random
 import copy
 class Population:
 
@@ -40,6 +41,9 @@ class Population:
                     self.pop.remove(a)
         except Exception:
             print('remove solution error')
+    
+    def shuffle_pop(self):
+        random.shuffle(self.pop)
 
     # ordena a populacao de forma reversa
     def reverse_sorted(self):
@@ -57,6 +61,7 @@ class Population:
         return pop_dic
     
     def get_pop_age(self):
+        self.shuffle_pop()
         pop_dic = dict()
         for s in self.pop:
             pop_dic[s.get_id()] = s.get_age()
@@ -75,6 +80,7 @@ class Population:
     def print_population(self):
         for s in self.pop:
             print(f'{s.get_id()}, {s.get_distance()} {s.get_fitness()}, {s.get_age()}')
+        
 
     def new_solution(self, client_list):
         try:

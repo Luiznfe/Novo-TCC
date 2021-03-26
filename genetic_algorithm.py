@@ -140,13 +140,13 @@ class GeneticAlgorithm:
     # Ainda preciso verificar
     def mutation(self, pop):
         number = 2
-        sel = random.sample(range(0, len(pop.get_population())), 2)
-        if number in sel:
-            s = random.sample(pop.get_population(), 1)
+        aux = random.sample(range(0, 11), 2)
+        if number in aux:
+            # print('mutation')
+            s = random.choice(pop.get_population())
             funcs.scramble(s)
-            funcs.inversion(s)
+            # funcs.inversion(s)
             funcs.swap(s)
-        print('mutation')
     
     # Seleciona os sobreviventes da população
     def survivior_selection(self, pop):
@@ -156,29 +156,3 @@ class GeneticAlgorithm:
         for i in range(2):
             pop.remove_solution(dict_age[-1][0])
             dict_age.pop()
-
-
-
-  
-
-        
-       
-
-
-                
-
-
-
-
-            
-        
-
-    
-
-        
-
-
-
-
-
-    

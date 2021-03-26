@@ -5,23 +5,24 @@ from genetic_algorithm import GeneticAlgorithm
 from population import Population
 import funcs 
 from read import Read
+import time
 
-p = Population(30)
+p = Population(20)
 p.new_population('c0530.txt')
-
 g = GeneticAlgorithm()
-g.fitness_function(p)
-print('Inicial Pop','-'*20)
 p.print_population()
+ini = time.time()
+while True:
+    g.fitness_function(p)
+    parents = []
+    parents = g.tournamet_selection(p, 3)
+    g.crossover(parents, p)
+    g.mutation(p)
+    g.survivior_selection(p)
+    fim = time.time()
+    if fim - ini > 60:
+        break
+
 print('-'*20)
-parents = []
-parents = g.tournamet_selection(p, 3)
-g.crossover(parents, p)
-print('Cross','-'*20)
 p.print_population()
-print('-'*20)
-g.mutation(p)
-g.survivior_selection(p)
-print('Pop','-'*20)
-p.print_population()
-print('-'*20)
+print('tempo ', fim - ini)

@@ -50,7 +50,6 @@ class Solution:
     
     def reset_solution(self):
         self.vehicle_list.clear()
-        self.client_list.clear()
         self.dist = 0
         self.fitness = 0
 
