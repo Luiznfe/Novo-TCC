@@ -22,6 +22,7 @@ class Vehicle:
     def get_distance(self):
         return self.distance
 
+    # Acho que n preciso da cópia
     def check_route(self):
         # cria uma copia da rota
         copy_route = self.route[:]
@@ -40,7 +41,6 @@ class Vehicle:
                 return 0
         return 1
         
-         
     def add_client(self, client):
         # adiciona o cliente na rota
         self.route.append(client)

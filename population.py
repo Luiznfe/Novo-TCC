@@ -34,6 +34,7 @@ class Population:
         self.pop.append(new_p)
         self.last_id += 1
 
+    # remove uma solução da lista de soluções
     def remove_solution(self, s_id):
         try:
             for a in self.pop:
@@ -42,46 +43,51 @@ class Population:
         except Exception:
             print('remove solution error')
     
+    # embaralha a lista de população
     def shuffle_pop(self):
         random.shuffle(self.pop)
 
     # ordena a populacao de forma reversa
-    def reverse_sorted(self):
-        self.pop.sort(key=attrgetter('dist'), reverse=True)
+    def sort_pop(self, arg):
+        self.pop.sort(key=attrgetter('dist'), reverse=arg)
 
     # atribui o fitness a cada solução da populacao
     def set_fitness(self, fitness):
         for i, s in enumerate(self.pop):
             s.set_fitness(fitness[i])
     
+    # retorna um dicionário que relaciona id com o fitness
     def get_dic(self):
         pop_dic = dict()
         for s in self.pop:
             pop_dic[s.get_id()] = s.get_fitness()
         return pop_dic
     
+    # retorna um dicionário que relaciona id com a idade 
     def get_pop_age(self):
+        # a população é embaralhada, pois 
         self.shuffle_pop()
         pop_dic = dict()
         for s in self.pop:
             pop_dic[s.get_id()] = s.get_age()
         return pop_dic
     
+    # retorna uma solução com id_s
     def get_item(self, id_s):
         for s in self.pop:
             if s.get_id() == id_s:
                 return s
     
-    
+    # ordena o dicionário 
     def sort_dictionary(self, dic):
         return sorted(dic.items(), key=lambda item: item[1])
 
-
+    # da um print na solução
     def print_population(self):
         for s in self.pop:
             print(f'{s.get_id()}, {s.get_distance()} {s.get_fitness()}, {s.get_age()}')
         
-
+    # gera uma nova solução com base em uma lista de clientes  
     def new_solution(self, client_list):
         try:
             aux = self.pop[0]
@@ -92,6 +98,7 @@ class Population:
         except :
             print('offspring error')
     
+    # inicia a idade de todos da população
     def new_age(self):
         for i in self.pop:
             i.plus_age()

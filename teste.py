@@ -1,3 +1,6 @@
-import random
-import numpy as np
-import time
+a = [1, 2]
+b = [2, 1]
+if b == a:
+    print('dentro')
+else:
+    print('fora')

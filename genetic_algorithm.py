@@ -13,7 +13,7 @@ class GeneticAlgorithm:
         sp = 1.8
         qt_solution = len(pop.get_population())
         # a populacao é ordenada de forma (maior distância - menor distância) percorrida
-        pop.reverse_sorted()
+        pop.sort_pop(True)
         # o fitness é calculado
         fitness = list()
         for i in range(qt_solution):
@@ -21,8 +21,7 @@ class GeneticAlgorithm:
             fitness.append(value)
         # o fitness calculado é atribuido a cada solucao da populacao
         pop.set_fitness(fitness)
-
-
+    
     # Parents Selection
     # K-Way Tournament Selection
     # 2 pais são selecionados
@@ -63,7 +62,6 @@ class GeneticAlgorithm:
             # para garantir uma minima parte herdada
             if c_point[0] != 0 and c_point[1] != len(p1) - 1: 
                 break
-        
         # uma base é criada para os filhos (copia parcial do pai)
         offsprings = list()
         offsprings.append(self.get_offspring(p1, p2, c_point, pop))
@@ -118,6 +116,7 @@ class GeneticAlgorithm:
     
     # o filho recebe a parte herada do p1
     def offspring_seq(self, in_seq, new_seq, c_point):
+        # remove os itens repetidos da lista
         self.remove_repeated(in_seq, new_seq)
         i = c_point[1] + 1
         while True:
@@ -138,9 +137,10 @@ class GeneticAlgorithm:
 
     # Mutation
     # Ainda preciso verificar
+    # Decidir quais são os melhores
     def mutation(self, pop):
-        number = 2
-        aux = random.sample(range(0, 11), 2)
+        number = 1
+        aux = random.sample(range(0, 11), 1)
         if number in aux:
             # print('mutation')
             s = random.choice(pop.get_population())
@@ -149,10 +149,14 @@ class GeneticAlgorithm:
             funcs.swap(s)
     
     # Seleciona os sobreviventes da população
+    # Verificar o funcionamento
     def survivior_selection(self, pop):
         dict_age = dict()
+        # dicionario que relaciona id com a idade
         dict_age = pop.get_pop_age()
-        dict_age = sorted(dict_age.items(), key=lambda item: item[1])
+        # o dicionario é ordenado para os os últimos seja removidos
+        dict_age = pop.sort_dictionary(dict_age)
         for i in range(2):
+            # print('removidos ',dict_age[-1][0])
             pop.remove_solution(dict_age[-1][0])
             dict_age.pop()

@@ -4,8 +4,6 @@ import copy
 
 # seleciona um subconjunto da lista de clientes e o embaralha
 def scramble(s):
-    # s = copy.deepcopy(a)
-    # pegar a sequencia da solução
     arr = np.array(s.get_sequence())
     # sortear o intervalo, o intervalo tera um tamanho mínimo de 20% do tamanho da lista
     # Ou deixar aleatorio    
@@ -19,15 +17,8 @@ def scramble(s):
     update_solution(s, seq)
     return s
 
-def update_solution(s, seq):
-    seq = s.get_new_client_list(seq)
-    s.reset_solution()
-    s.set_client_list(seq)
-    s.initial_solution()
-
 def swap(s):
     # pegar a sequencia da solução
-    # arr = np.array(s.get_sequence())
     arr = s.get_sequence()
     values = random.sample(range(0, len(arr)), 2)
     aux = arr[values[0]]
@@ -35,12 +26,23 @@ def swap(s):
     arr[values[1]] = aux
     update_solution(s, arr)
 
+def swap_2(s):
+    arr = np.array(s.get_sequence())
+    values = random.sample(range(0, len(arr)), 4)
+    aux = arr[values[0]]
+    arr[values[0]] = arr[values[1]]
+    arr[values[1]] = aux
+    aux = arr[values[2]]
+    arr[values[2]] = arr[values[3]]
+    arr[values[3]] = aux
+    seq = list(arr)
+    update_solution(s, seq)
+
 # um subconjunto é invertido 
 def inversion(s):
     arr = None
     try:
         arr = np.array(s.get_sequence())
-   
         # sortear o intervalo, o intervalo tera um tamanho mínimo de 20% do tamanho da lista
         interval = list()
         while True:
@@ -55,6 +57,27 @@ def inversion(s):
     except :
         print('erro em ',s)
 
+def local_search(s):
+    c_aux = s.get_clientList()
+    aux_dist = s.get_distance()
+    count = 0
+    while True:
+        # funcs.scramble(a)
+        swap(s)
+        swap_2(s)
+        # funcs.inversion(a)
+        if s.get_distance() < aux_dist :
+            break
+        if count > 100:
+            s.reset_solution()
+            s.set_client_list(c_aux)
+            s.initial_solution()
+        count += 1
 
+def update_solution(s, seq):
+    seq = s.get_new_client_list(seq)
+    s.reset_solution()
+    s.set_client_list(seq)
+    s.initial_solution()
 
     
