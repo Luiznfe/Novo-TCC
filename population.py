@@ -103,6 +103,10 @@ class Population:
         for i in self.pop:
             i.plus_age()
     
+    def print_fitness(self):
+        for i in self.pop:
+            print(f'{i.get_id()}, {i.get_fitness()}')
+    
 
 
 

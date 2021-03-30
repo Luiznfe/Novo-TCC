@@ -21,6 +21,7 @@ class GeneticAlgorithm:
             fitness.append(value)
         # o fitness calculado é atribuido a cada solucao da populacao
         pop.set_fitness(fitness)
+        # pop.print_fitness()
     
     # Parents Selection
     # K-Way Tournament Selection

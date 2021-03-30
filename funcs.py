@@ -68,7 +68,7 @@ def local_search(s):
         # funcs.inversion(a)
         if s.get_distance() < aux_dist :
             break
-        if count > 100:
+        if count > 30:
             s.reset_solution()
             s.set_client_list(c_aux)
             s.initial_solution()
