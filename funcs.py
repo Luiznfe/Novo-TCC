@@ -42,15 +42,17 @@ def swap_2(s):
 def inversion(s, prob_s):
     arr = None
     try:
+        # inicia um array com os id dos clientes
         arr = np.array(s.get_sequence())
+        # decide o tamanho do intervalo com base pa probalidade de mutação
         size = round(prob_s * arr.size)
-        print(arr)
+        # inverte o subconjunto escolhido
         aux = random.randint(0, arr.size - size)
         new_a = np.array(arr[aux :aux + size])
         arr[aux : aux + size] = new_a[::-1]
-        print(f'{aux}, {aux + size}')
-        print('mutation ',arr)
+        # transforma em uma lista
         seq = list(arr)
+        # atualiza a solução
         update_solution(s, arr)
     except Exception:
         print('mutation error')
