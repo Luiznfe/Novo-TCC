@@ -1,0 +1,17 @@
+
+gerar população (p)
+calcular fitness de p
+BEST = melhor solucao em p
+para todo i em p:
+    se rand() <= PCROSS:
+        j = seleciona(p)
+        f = cossover(i, j)
+        filhos = adiciona(f)
+para todo i em filhos
+    se rand() <= PMUT:
+        mutacao(i)
+selecionar os sobreviventes
+5% elitismo
+80 % torneio
+15 % aleatório 
+
