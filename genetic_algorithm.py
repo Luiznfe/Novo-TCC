@@ -12,7 +12,7 @@ class GeneticAlgorithm:
         # sp = selective pressure [1.0 , 2.0]
         sp = 1.8
         qt_solution = len(pop.get_population())
-        # a populacao é ordenada de forma (maior distância - menor distância) percorrida
+        # a populacao é ordenada de forma (maior distância -> menor distância) 
         pop.sort_pop(True)
         # o fitness é calculado
         fitness = list()
@@ -30,43 +30,44 @@ class GeneticAlgorithm:
     def tournamet_selection(self, pop, k):
         dict_pop = {}
         candidate = []
-        parents_id = []
         # um dicionário que relacina id com o fitness é utilizada para selecionar os pais
         dict_pop = pop.get_dic()
         # k amostras são selecionadas aleatoriamente dentro do dicionário
         # o dicionário é ordenado e o item com maior fitness é selecionado
-        for i in range(2):
-            candidate = random.sample(dict_pop.items(), k)
-            candidate = sorted(candidate, key=lambda item: item[1]).pop()[0]
-            parents_id.append(candidate)
-            dict_pop.pop(candidate)
-        parents = []
+        # uma solucao é escolhida
+        candidate = random.sample(dict_pop.items(), k)
+        candidate = sorted(candidate, key=lambda item: item[1]).pop()[0]
         # com base no id a solução selecionado é recuperada
-        for i in range(2):
-            parents.append(pop.get_item(parents_id[i]))
-        return parents 
+        p = pop.get_item(candidate)
+        # a solução selecionada é retornada
+        return p 
 
     # Order Crossover Operator (OX)
     # Acontece com uma alta probabilidade
     # Nesse cado devido a restrição da capacidade do caminhão, todas as rotas precisam ser refeitas.
-    def crossover(self, parents, pop):
-        pop.new_age()
+    def crossover(self, p1, pop, cross_p):
         # p1 e p2 recebem a ordem de visitação dos pais
-        p1 = list()
-        p2 = list()
-        p1 = parents[0].get_sequence()
-        p2 = parents[1].get_sequence()
+        c_p1 = list()
+        c_p2 = list()
+        # selecionando p2
+        k = round(cross_p * len(pop.get_population()))
+        while True:
+            p2 = self.tournamet_selection(pop, k)
+            if p2.get_id() != p1.get_id():
+                break
+        # recebe a ordem de visitação da solucao
+        c_p1 = p1.get_sequence()
+        c_p2 = p2.get_sequence()
         # sorteando os pontos de corte
         while True:
-            c_point = random.sample(range(0, len(p1)), 2)
+            c_point = random.sample(range(0, len(c_p1)), 2)
             c_point.sort()
             # para garantir uma minima parte herdada
-            if c_point[0] != 0 and c_point[1] != len(p1) - 1: 
+            if c_point[0] != 0 and c_point[1] != len(c_p1) - 1: 
                 break
         # uma base é criada para os filhos (copia parcial do pai)
-        offsprings = list()
-        offsprings.append(self.get_offspring(p1, p2, c_point, pop))
-        offsprings.append(self.get_offspring(p2, p1, c_point, pop))
+        self.get_offspring(c_p1, c_p2, c_point, pop)
+        self.get_offspring(c_p2, c_p1, c_point, pop)
 
 
     
@@ -85,7 +86,7 @@ class GeneticAlgorithm:
         off_list = aux.get_new_client_list(seq_off)
         # uma nova solução "filho" é criada e adicionada a populacao
         off = pop.new_solution(off_list)
-        pop.add_solution(off)
+        pop.add_offspring(off)
         return off
 
         
@@ -136,28 +137,10 @@ class GeneticAlgorithm:
             if i in new_seq:
                 new_seq.remove(i)
 
-    # Mutation
+    # Mutação
     # Ainda preciso verificar
-    # Decidir quais são os melhores
-    def mutation(self, pop):
-        number = 1
-        aux = random.sample(range(0, 11), 1)
-        if number in aux:
-            # print('mutation')
-            s = random.choice(pop.get_population())
-            funcs.scramble(s)
-            # funcs.inversion(s)
-            funcs.swap(s)
-    
+    # uma inversão é feita em uma faixa de tamanho proporcional PMUT
+    def mutation(self, s , PMUT, prob_s):
+        funcs.inversion(s, prob_s)
+
     # Seleciona os sobreviventes da população
-    # Verificar o funcionamento
-    def survivior_selection(self, pop):
-        dict_age = dict()
-        # dicionario que relaciona id com a idade
-        dict_age = pop.get_pop_age()
-        # o dicionario é ordenado para os os últimos seja removidos
-        dict_age = pop.sort_dictionary(dict_age)
-        for i in range(2):
-            # print('removidos ',dict_age[-1][0])
-            pop.remove_solution(dict_age[-1][0])
-            dict_age.pop()

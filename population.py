@@ -3,10 +3,12 @@ from solution import Solution
 from read import Read
 import random
 import copy
+
 class Population:
 
     def __init__(self, size):
         self.pop = list()
+        self.offspring = list()
         self.size = size
         self.last_id = size + 1
     
@@ -24,14 +26,17 @@ class Population:
     # retorna a populacao
     def get_population(self):
         return self.pop
+
+    def get_offsprings(self):
+        return self.offspring
     
     # retorna o ultimo id que pode ser usado
     def get_last_id(self):
         return self.last_id
 
     # adiciona uma solução a populacao e incrementa o últmo id
-    def add_solution(self, new_p):
-        self.pop.append(new_p)
+    def add_offspring(self, new_p):
+        self.offspring.append(new_p)
         self.last_id += 1
 
     # remove uma solução da lista de soluções
@@ -85,7 +90,12 @@ class Population:
     # da um print na solução
     def print_population(self):
         for s in self.pop:
-            print(f'{s.get_id()}, {s.get_distance()} {s.get_fitness()}, {s.get_age()}')
+            print(f'{s.get_id()}, {s.get_distance()}, {s.get_fitness()}')
+            
+    def print_offsprings(self):
+        for s in self.offspring:
+            print(f'{s.get_id()}, {s.get_distance()}, {s.get_fitness()}')
+
         
     # gera uma nova solução com base em uma lista de clientes  
     def new_solution(self, client_list):
@@ -106,11 +116,6 @@ class Population:
     def print_fitness(self):
         for i in self.pop:
             print(f'{i.get_id()}, {i.get_fitness()}')
-    
-
-
-
-
     
     
 if __name__ == '__main__':

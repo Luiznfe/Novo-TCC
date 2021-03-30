@@ -1,6 +1,2 @@
-a = [1, 2]
-b = [2, 1]
-if b == a:
-    print('dentro')
-else:
-    print('fora')
+import random
+print(round(0.3 * 4))

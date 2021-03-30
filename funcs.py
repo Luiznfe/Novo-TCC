@@ -39,23 +39,21 @@ def swap_2(s):
     update_solution(s, seq)
 
 # um subconjunto é invertido 
-def inversion(s):
+def inversion(s, prob_s):
     arr = None
     try:
         arr = np.array(s.get_sequence())
-        # sortear o intervalo, o intervalo tera um tamanho mínimo de 20% do tamanho da lista
-        interval = list()
-        while True:
-            interval = random.sample(range(0, arr.size), 2)
-            if abs(interval[0] - interval[1] > int(0.2 * arr.size)):
-                break
-        interval.sort()
-        new_a = np.array(arr[interval[0]:interval[1]])
-        arr[interval[0]:interval[1]] = new_a[::-1]
+        size = round(prob_s * arr.size)
+        print(arr)
+        aux = random.randint(0, arr.size - size)
+        new_a = np.array(arr[aux :aux + size])
+        arr[aux : aux + size] = new_a[::-1]
+        print(f'{aux}, {aux + size}')
+        print('mutation ',arr)
         seq = list(arr)
         update_solution(s, arr)
-    except :
-        print('erro em ',s)
+    except Exception:
+        print('mutation error')
 
 def local_search(s):
     c_aux = s.get_clientList()
@@ -80,4 +78,5 @@ def update_solution(s, seq):
     s.set_client_list(seq)
     s.initial_solution()
 
-    
+if __name__ == '__main__':
+    inversion(2, 3)
