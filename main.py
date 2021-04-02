@@ -21,48 +21,44 @@ class Main:
         p.new_population('c0530.txt')
         return p
     
-    def teste(self, pop_size, s):
+    def teste2(self, pop_size, s):
         g = GeneticAlgorithm()
         p = self.create_pop(pop_size)
-        g.fitness_function(p)
-        # p.print_population()
+        g.fitness_function2(p.get_population(), p)
+    
+    def teste(self, pop_size, s):
+        # população iniciada
+        g = GeneticAlgorithm()
+        p = self.create_pop(pop_size)
+        # fitness calculado
+        g.fitness_function(p.get_population(), p)
+        print('pop inicial')
+        p.print_population()
+        # definida a probabilidade de crossover
         p_cross = 0.3
         for i in p.get_population():
             if random.random() <= 0.3:
                 g.crossover(i, p, p_cross)
-        print('-'*20)
+        # off_seze rebe a quantidade de filhos gerados
+        off_size = len(p.get_offsprings())
+        # fitness dos filhos é calculado
+        g.fitness_function(p.get_offsprings(), p)
+        print('-'*20, 'of')
         p.print_offsprings()
-        print('-'*20, 'mutation')
-        p_mut = 0.1
+        print('-'*20,)
+        # definida a probabilidade de mutação
+        # DECIDIR A PROB DE MUTAÇÃO
+        p_mut = 0.2
         for i in p.get_offsprings():
             if random.random() <= p_mut:
                 g.mutation(i, p_cross, p_mut)
+        g.fitness_function(p.get_offsprings(), p)
+        print('-'*20,'ops muta')
+        g.survivior_selection(p, pop_size)
         # p.print_offsprings()
-        
-
-    def run(self, pop_size, e_time):
-        g = GeneticAlgorithm()
-        p = self.create_pop(pop_size)
-        # for i in p.get_population():
-        #     funcs.local_search(i)
-        while True:
-            g.fitness_function(p)
-            # p.print_population()
-            parents = []
-            parents = g.tournamet_selection(p, 3)
-            g.crossover(parents, p)
-            # for i in p.get_population():
-            #     funcs.local_search(i)
-            g.mutation(p)
-            for i in p.get_population():
-                funcs.local_search(i)
-            g.survivior_selection(p)
-            if e_time < 0:
-                break
-            e_time -= 1
-        print('-'*20)
+        print('new pop')
         p.print_population()
-        # print('tempo ', fim - ini)
+        
 
 if __name__ == '__main__':
    

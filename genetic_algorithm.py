@@ -8,39 +8,60 @@ class GeneticAlgorithm:
     # calcula o fitness de cada indivíduo da populacao
     # o calculo é feito com base na posição em que as solucoes estão e a quantidade 
     # ranqueamento linear
-    def fitness_function(self, pop):
-        # sp = selective pressure [1.0 , 2.0]
+    # def fitness_function(self, pop, pop_size, off):
+    #     # sp = selective pressure [1.0 , 2.0]
+    #     sp = 1.8
+    #     qt_solution = pop_size
+    #     # o fitness é calculado
+    #     fitness = list()
+    #     for i in range(qt_solution):
+    #         value = 2 - sp + 2 * (sp - 1) * ((i - 1)/(qt_solution - 1))
+    #         fitness.append(value)
+    #     # a populacao é ordenada de forma (maior distância -> menor distância)
+    #     pop.sort_pop(True, off)
+    #     # o fitness calculado é atribuido a cada solucao da populacao
+    #     pop.set_fitness(fitness, off)
+    
+
+    def fitness_function(self, c_list, p):
         sp = 1.8
-        qt_solution = len(pop.get_population())
-        # a populacao é ordenada de forma (maior distância -> menor distância) 
-        pop.sort_pop(True)
-        # o fitness é calculado
+        c_size = len(c_list)
         fitness = list()
-        for i in range(qt_solution):
-            value = 2 - sp + 2 * (sp - 1) * ((i - 1)/(qt_solution - 1))
+        for i in range(c_size):
+            value = 2 - sp + 2 * (sp - 1) * ((i - 1)/(c_size - 1))
             fitness.append(value)
-        # o fitness calculado é atribuido a cada solucao da populacao
-        pop.set_fitness(fitness)
-        # pop.print_fitness()
+        p.sort_teste(c_list)
+        p.set_fitness2(fitness, c_list)
+        
+    
+    # a lista deve ser ordenada antes
+    def tournamet_selection(self, p, c_list, k):
+        # seleciona k elementso da minha lista
+        selected = random.sample(c_list, k)
+        # ordena a lista com base no fitness
+        p.sort_teste(selected)
+        # retorna o melhor elemento
+        return selected.pop()
+
+
     
     # Parents Selection
     # K-Way Tournament Selection
-    # 2 pais são selecionados
     # k é o número de indivíduos da população selecionados
-    def tournamet_selection(self, pop, k):
-        dict_pop = {}
-        candidate = []
-        # um dicionário que relacina id com o fitness é utilizada para selecionar os pais
-        dict_pop = pop.get_dic()
-        # k amostras são selecionadas aleatoriamente dentro do dicionário
-        # o dicionário é ordenado e o item com maior fitness é selecionado
-        # uma solucao é escolhida
-        candidate = random.sample(dict_pop.items(), k)
-        candidate = sorted(candidate, key=lambda item: item[1]).pop()[0]
-        # com base no id a solução selecionado é recuperada
-        p = pop.get_item(candidate)
-        # a solução selecionada é retornada
-        return p 
+    # def tournamet_selection(self, pop, k):
+    #     dict_pop = {}
+    #     candidate = []
+    #     # um dicionário que relacina id com o fitness é utilizada para selecionar os pais
+    #     dict_pop = pop.get_dic()
+    #     # k amostras são selecionadas aleatoriamente dentro do dicionário
+    #     # o dicionário é ordenado e o item com maior fitness é selecionado
+    #     # uma solucao é escolhida
+    #     candidate = random.sample(dict_pop.items(), k)
+    #     candidate = sorted(candidate, key=lambda item: item[1]).pop()[0]
+    #     # com base no id a solução selecionado é recuperada
+    #     p = pop.get_item(candidate)
+    #     # a solução selecionada é retornada
+    #     return p 
 
     # Order Crossover Operator (OX)
     # Acontece com uma alta probabilidade
@@ -50,9 +71,10 @@ class GeneticAlgorithm:
         c_p1 = list()
         c_p2 = list()
         # selecionando p2
+        # k depende da probabilidade do crossover
         k = round(cross_p * len(pop.get_population()))
         while True:
-            p2 = self.tournamet_selection(pop, k)
+            p2 = self.tournamet_selection(pop, pop.get_population(), k)
             if p2.get_id() != p1.get_id():
                 break
         # recebe a ordem de visitação da solucao
@@ -87,6 +109,7 @@ class GeneticAlgorithm:
         # uma nova solução "filho" é criada e adicionada a populacao
         off = pop.new_solution(off_list)
         pop.add_offspring(off)
+        # retorna o filho
         return off
 
         
@@ -144,3 +167,38 @@ class GeneticAlgorithm:
         funcs.inversion(s, prob_s)
 
     # Seleciona os sobreviventes da população
+    # 5% elitismo
+    def survivior_selection(self, pop, pop_size):
+        # 5 % da população escolhida por elitismo
+        # juntar as duas listas
+        merged_list = pop.merge()
+        temp_list = list()
+        # 5%
+        e_size = round(0.05 * pop_size)
+        for i in range(e_size):
+            temp_list.append(merged_list.pop())
+
+        # 80% tournament selection
+        t_size = round(0.8 * pop_size)
+        # k = 10% da populção
+        k = round(len(merged_list) * 0.1)
+        for i in range(t_size):
+            c = self.tournamet_selection(pop, merged_list, k)
+            merged_list.remove(c)
+            temp_list.append(c)
+        
+        # 15% random
+        while len(temp_list) != len(pop.get_population()):
+            p = random.choice(merged_list)
+            merged_list.remove(p)
+            temp_list.append(p)
+
+        pop.set_population(temp_list)
+
+
+        
+        
+
+
+        
+

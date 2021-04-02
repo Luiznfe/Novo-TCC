@@ -11,7 +11,8 @@ class Population:
         self.offspring = list()
         self.size = size
         self.last_id = size + 1
-    
+
+
     # gera um população inicial com base to no tamanho passado
     # todas as soluções sao geradas de forma aleatória
     def new_population(self, path):
@@ -26,6 +27,9 @@ class Population:
     # retorna a populacao
     def get_population(self):
         return self.pop
+    
+    def set_population(self, new_pop):
+        self.pop = new_pop[:]
 
     def get_offsprings(self):
         return self.offspring
@@ -53,13 +57,27 @@ class Population:
         random.shuffle(self.pop)
 
     # ordena a populacao de forma reversa
-    def sort_pop(self, arg):
-        self.pop.sort(key=attrgetter('dist'), reverse=arg)
+    def sort_pop(self, arg, off):
+        if off == 0:
+            self.pop.sort(key=attrgetter('dist'), reverse=arg)
+        else:
+            self.offspring.sort(key=attrgetter('dist'), reverse=arg)
 
     # atribui o fitness a cada solução da populacao
-    def set_fitness(self, fitness):
-        for i, s in enumerate(self.pop):
+    def set_fitness(self, fitness, off):
+        c_list = []
+        if off == 0:
+            c_list = self.pop
+        else:
+            c_list = self.offspring
+
+        for i, s in enumerate(c_list):
             s.set_fitness(fitness[i])
+    
+    def set_fitness2(self, fitness, aux_list):
+        for i, s in enumerate(aux_list):
+            s.set_fitness(fitness[i])
+
     
     # retorna um dicionário que relaciona id com o fitness
     def get_dic(self):
@@ -117,6 +135,17 @@ class Population:
         for i in self.pop:
             print(f'{i.get_id()}, {i.get_fitness()}')
     
+    # funde a população atual com os filhos
+    def merge(self):
+        merge_list = []
+        merge_list = self.pop[:]
+        for i in self.offspring:
+            merge_list.append(i)
+        self.sort_teste(merge_list)
+        return merge_list
+        
+    def sort_teste(self, c_list):
+        c_list.sort(key=attrgetter('dist'), reverse=True)
     
 if __name__ == '__main__':
 
