@@ -137,12 +137,12 @@ class Population:
     
     # funde a população atual com os filhos
     def merge(self):
-        merge_list = []
-        merge_list = self.pop[:]
+        merged_list = []
+        merged_list = self.pop[:]
         for i in self.offspring:
-            merge_list.append(i)
-        self.sort_teste(merge_list)
-        return merge_list
+            merged_list.append(i)
+        # self.sort_teste(merged_list)
+        return merged_list
         
     def sort_teste(self, c_list):
         c_list.sort(key=attrgetter('dist'), reverse=True)

@@ -48,16 +48,17 @@ class Solution:
     def set_client_list(self, c_list):
         self.client_list = c_list[:]
     
+    # limpa alguns componentes
     def reset_solution(self):
         self.vehicle_list.clear()
         self.dist = 0
         self.fitness = 0
 
-    #  incrementa a distancia total
+    #  soma um valor a distancia total
     def total_distance(self, dist):
         self.dist += dist
     
-    # gera uma lista de clientes random
+    # embaralha a lista de clientes
     def random_client_list(self):
         random.shuffle(self.client_list)
     
@@ -68,15 +69,6 @@ class Solution:
     # set fitness
     def set_fitness(self, value):
         self.fitness = value
-    
-    # retorna uma lista com apenas ids dos clientes sem o depósito
-    def get_sequence(self):
-        seq = list()
-        for vehicle in self.vehicle_list:
-            for client in vehicle.get_route():
-                if client.get_id() != 0:
-                    seq.append(client.get_id())
-        return seq
     
     # gera uma solucao inicial
     def initial_solution(self):
@@ -126,19 +118,19 @@ class Solution:
             id += 1
             # print(f'distacia percorrida {v.get_distance()}')
     
-    # retorna um cliente com base no id
-    def get_client(self, id):
-        clients = self.client_list
-        for c in clients:
-            if c.get_id() == id:
-                return c
+    # # retorna um cliente com base no id
+    # def get_client(self, id):
+    #     clients = self.client_list
+    #     for c in clients:
+    #         if c.get_id() == id:
+    #             return c
     
-    # retorna clientes com base em uma lista de ids passados
-    def get_new_client_list(self, c_list):
-        aux = list()
-        for i in c_list:
-            aux.append(self.get_client(i))
-        return aux
+    # # retorna clientes com base em uma lista de ids passados
+    # def get_new_client_list(self, c_list):
+    #     aux = list()
+    #     for i in c_list:
+    #         aux.append(self.get_client(i))
+    #     return aux
     
 
         

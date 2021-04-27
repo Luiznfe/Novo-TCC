@@ -30,32 +30,38 @@ class Main:
         # população iniciada
         g = GeneticAlgorithm()
         p = self.create_pop(pop_size)
-        # fitness calculado
-        g.fitness_function(p.get_population(), p)
         print('pop inicial')
         p.print_population()
+        while True:
+            # fitness calculado
+            g.fitness_function(p.get_population(), p)
+            # print('pop inicial')
+            # p.print_population()
         # definida a probabilidade de crossover
-        p_cross = 0.3
-        for i in p.get_population():
-            if random.random() <= 0.3:
-                g.crossover(i, p, p_cross)
-        # off_seze rebe a quantidade de filhos gerados
-        off_size = len(p.get_offsprings())
-        # fitness dos filhos é calculado
-        g.fitness_function(p.get_offsprings(), p)
-        print('-'*20, 'of')
-        p.print_offsprings()
-        print('-'*20,)
-        # definida a probabilidade de mutação
-        # DECIDIR A PROB DE MUTAÇÃO
-        p_mut = 0.2
-        for i in p.get_offsprings():
-            if random.random() <= p_mut:
-                g.mutation(i, p_cross, p_mut)
-        g.fitness_function(p.get_offsprings(), p)
-        print('-'*20,'ops muta')
-        g.survivior_selection(p, pop_size)
-        # p.print_offsprings()
+            p_cross = 0.3  # 30%
+            for i in p.get_population():
+                if random.random() <= 0.3:
+                    g.crossover(i, p, p_cross)
+            # off_seze rebe a quantidade de filhos gerados
+            off_size = len(p.get_offsprings())
+            # fitness dos filhos é calculado
+            g.fitness_function(p.get_offsprings(), p)
+            # print('-'*20, 'offsprings')
+            # p.print_offsprings()
+            # print('-'*20,)
+            # definida a probabilidade de mutação
+            # DECIDIR A PROB DE MUTAÇÃO
+            p_mut = 0.2
+            for i in p.get_offsprings():
+                if random.random() <= p_mut:
+                    g.mutation(i, p_cross, p_mut)
+            g.fitness_function(p.get_offsprings(), p)
+            # print('-'*20,'ops muta')
+            g.survivior_selection(p, pop_size)
+            # p.print_offsprings()
+            s -= 1
+            if s == 0:
+                break
         print('new pop')
         p.print_population()
         

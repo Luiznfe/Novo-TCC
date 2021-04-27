@@ -2,6 +2,28 @@ import random
 import numpy as np
 import copy
 
+# retorna uma lista com apenas ids dos clientes sem o depósito
+def get_sequence(p):
+    seq = list()
+    for vehicle in p.get_vehicle_list():
+        for client in vehicle.get_route():
+            if client.get_id() != 0:
+                seq.append(client.get_id())
+    return seq
+    
+# retorna um cliente com base no id
+def get_client(p, id):
+    for c in p.get_clientList():
+        if c.get_id() == id:
+            return c
+    
+# retorna clientes com base em uma lista de ids passados
+def get_new_client_list(p, c_list):
+    aux = list()
+    for i in c_list:
+        aux.append(get_client(p, i))
+    return aux
+
 # seleciona um subconjunto da lista de clientes e o embaralha
 def scramble(s):
     arr = np.array(s.get_sequence())

@@ -78,8 +78,8 @@ class GeneticAlgorithm:
             if p2.get_id() != p1.get_id():
                 break
         # recebe a ordem de visitação da solucao
-        c_p1 = p1.get_sequence()
-        c_p2 = p2.get_sequence()
+        c_p1 = funcs.get_sequence(p1)
+        c_p2 = funcs.get_sequence(p2)
         # sorteando os pontos de corte
         while True:
             c_point = random.sample(range(0, len(c_p1)), 2)
@@ -105,7 +105,7 @@ class GeneticAlgorithm:
         self.offspring_seq(seq_off, seq, c_point)
         # a lista com os clientes reais é recuperada 
         aux = pop.get_population()[0]
-        off_list = aux.get_new_client_list(seq_off)
+        off_list = funcs.get_new_client_list(aux, seq_off)
         # uma nova solução "filho" é criada e adicionada a populacao
         off = pop.new_solution(off_list)
         pop.add_offspring(off)
@@ -169,30 +169,27 @@ class GeneticAlgorithm:
     # Seleciona os sobreviventes da população
     # 5% elitismo
     def survivior_selection(self, pop, pop_size):
-        # 5 % da população escolhida por elitismo
-        # juntar as duas listas
+        # juntar as duas listas (filhos e população atual)
         merged_list = pop.merge()
+        # calcula o fitness da nova lista
+        self.fitness_function(merged_list, pop)
         temp_list = list()
-        # 5%
+        # 5 % da população escolhida por elitismo
         e_size = round(0.05 * pop_size)
         for i in range(e_size):
             temp_list.append(merged_list.pop())
-
-        # 80% tournament selection
+        # 80% tournament selection / # k = 10% da populção (quantidades de amostras comparadas)
         t_size = round(0.8 * pop_size)
-        # k = 10% da populção
         k = round(len(merged_list) * 0.1)
         for i in range(t_size):
             c = self.tournamet_selection(pop, merged_list, k)
             merged_list.remove(c)
             temp_list.append(c)
-        
-        # 15% random
+        # 15% random / ou até completar a lista
         while len(temp_list) != len(pop.get_population()):
             p = random.choice(merged_list)
             merged_list.remove(p)
             temp_list.append(p)
-
         pop.set_population(temp_list)
 
 
