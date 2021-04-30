@@ -52,7 +52,7 @@ class Population:
         except Exception:
             print('remove solution error')
     
-    # embaralha a lista de população
+    # embaralha populção
     def shuffle_pop(self):
         random.shuffle(self.pop)
 
@@ -64,46 +64,27 @@ class Population:
             self.offspring.sort(key=attrgetter('dist'), reverse=arg)
 
     # atribui o fitness a cada solução da populacao
-    def set_fitness(self, fitness, off):
-        c_list = []
-        if off == 0:
-            c_list = self.pop
-        else:
-            c_list = self.offspring
+    # def set_fitness(self, fitness, off):
+    #     c_list = []
+    #     if off == 0:
+    #         c_list = self.pop
+    #     else:
+    #         c_list = self.offspring
 
-        for i, s in enumerate(c_list):
-            s.set_fitness(fitness[i])
+    #     for i, s in enumerate(c_list):
+    #         s.set_fitness(fitness[i])
     
     def set_fitness2(self, fitness, aux_list):
         for i, s in enumerate(aux_list):
             s.set_fitness(fitness[i])
 
-    
-    # retorna um dicionário que relaciona id com o fitness
-    def get_dic(self):
-        pop_dic = dict()
-        for s in self.pop:
-            pop_dic[s.get_id()] = s.get_fitness()
-        return pop_dic
-    
-    # retorna um dicionário que relaciona id com a idade 
-    def get_pop_age(self):
-        # a população é embaralhada, pois 
-        self.shuffle_pop()
-        pop_dic = dict()
-        for s in self.pop:
-            pop_dic[s.get_id()] = s.get_age()
-        return pop_dic
-    
+ 
     # retorna uma solução com id_s
     def get_item(self, id_s):
         for s in self.pop:
             if s.get_id() == id_s:
                 return s
-    
-    # ordena o dicionário 
-    def sort_dictionary(self, dic):
-        return sorted(dic.items(), key=lambda item: item[1])
+
 
     # da um print na solução
     def print_population(self):
@@ -126,11 +107,6 @@ class Population:
         except :
             print('offspring error')
     
-    # inicia a idade de todos da população
-    def new_age(self):
-        for i in self.pop:
-            i.plus_age()
-    
     def print_fitness(self):
         for i in self.pop:
             print(f'{i.get_id()}, {i.get_fitness()}')
@@ -144,18 +120,16 @@ class Population:
         # self.sort_teste(merged_list)
         return merged_list
         
-    def sort_teste(self, c_list):
+    def sort_d(self, c_list):
         c_list.sort(key=attrgetter('dist'), reverse=True)
+    
+    def sort_f(self, list):
+        list.sort(key=attrgetter('fitness'), reverse=True)
     
 if __name__ == '__main__':
 
     p = Population(3)
     p.new_population('c0530.txt')
-    p.print_population()
-    # p.reverse_sorted()
-    p.remove_solution(1)
-    p.print_population()
-
 
   
 

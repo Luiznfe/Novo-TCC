@@ -13,16 +13,9 @@ class Solution:
         self.cap = cap  # capacidade de cada carro da frota
         self.dist = 0  # distancia percorrida pela frota
         self.fitness = 0 # fitness da solução
-        self.age = 0
     
     def __repr__(self):
-        return '{}, {}, {}, age {}'.format(self.id_solution, self.dist, self.fitness, self.age)
-
-    def get_age(self):
-        return self.age
-    
-    def plus_age(self):
-        self.age += 1
+        return '{}, {}, {}, age {}'.format(self.id_solution, self.dist, self.fitness)
     
     def get_id(self):
         return self.id_solution
@@ -117,29 +110,17 @@ class Solution:
             # incrementa 1 ao id do proximo veículo criado
             id += 1
             # print(f'distacia percorrida {v.get_distance()}')
-    
-    # # retorna um cliente com base no id
-    # def get_client(self, id):
-    #     clients = self.client_list
-    #     for c in clients:
-    #         if c.get_id() == id:
-    #             return c
-    
-    # # retorna clientes com base em uma lista de ids passados
-    # def get_new_client_list(self, c_list):
-    #     aux = list()
-    #     for i in c_list:
-    #         aux.append(self.get_client(i))
-    #     return aux
+
+
     
     # retorna uma lista com apenas ids dos clientes sem o depósito
-    def get_sequence(self):
-        seq = list()
+    def id_list(self):
+        ids = list()
         for vehicle in self.get_vehicle_list():
             for client in vehicle.get_route():
                 if client.get_id() != 0:
-                    seq.append(client.get_id())
-        return seq
+                    ids.append(client.get_id())
+        return ids
     
     # retorna um cliente com base no id
     def get_client(self, id):
@@ -148,7 +129,7 @@ class Solution:
                 return c
         
 # retorna clientes com base em uma lista de ids passados
-    def get_new_client_list(self, c_list):
+    def retrieve_list(self, c_list):
         aux = list()
         for i in c_list:
             aux.append(self.get_client(i))

@@ -24,7 +24,11 @@ class Main:
     def teste2(self, pop_size, s):
         g = GeneticAlgorithm()
         p = self.create_pop(pop_size)
-        g.fitness_function2(p.get_population(), p)
+        g.fitness_function(p.get_population(), p)
+        p.print_population()
+        print('selection')
+        a = g.tournamet_selection(p, p.get_population(), 3)
+        print(a)
     
     def teste(self, pop_size, s):
         # população iniciada

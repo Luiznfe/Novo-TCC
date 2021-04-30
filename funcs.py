@@ -2,27 +2,51 @@ import random
 import numpy as np
 import copy
 
-# retorna uma lista com apenas ids dos clientes sem o depósito
-def get_sequence(p):
-    seq = list()
-    for vehicle in p.get_vehicle_list():
-        for client in vehicle.get_route():
-            if client.get_id() != 0:
-                seq.append(client.get_id())
-    return seq
-    
-# retorna um cliente com base no id
-def get_client(p, id):
-    for c in p.get_clientList():
-        if c.get_id() == id:
-            return c
-    
-# retorna clientes com base em uma lista de ids passados
-def get_new_client_list(p, c_list):
-    aux = list()
-    for i in c_list:
-        aux.append(get_client(p, i))
-    return aux
+# retorna uma nova sequencia de acordo com os pontos de corte
+def parent_seq(p1, c_point):
+    # começa do segundo ponto de corte e vai até o primeiro
+    new_seq = []
+    i = c_point[1] + 1
+    while True:
+        if i == len(p1):
+            i = 0
+        if i == c_point[1]:
+            new_seq.append(p1[i])
+            break
+        new_seq.append(p1[i])
+        i += 1
+    return new_seq
+
+# cria uma nova sequencia e aplica a parte herdada do pai2
+def subset(p2, c_point):
+    in_seq = []
+    # o array é inicializado com X
+    for i in range(len(p2)):
+        in_seq.append('X')
+    # o array então recebe a parte herada 
+    for i in range(c_point[0], c_point[1] + 1):
+        in_seq[i] = p2[i]
+    return in_seq
+
+# o filho recebe a parte herada do p1
+def off_seq(in_seq, new_seq, c_point):
+    # remove os itens repetidos da lista
+    remove_duplicates(in_seq, new_seq)
+    i = c_point[1] + 1
+    while True:
+        if len(new_seq) == 0:
+            break
+        if i == len(in_seq):
+            i = 0
+        in_seq[i] = new_seq.pop(0)
+        i += 1
+        # print('off', in_seq)
+
+# remove os valores repetidos de duas listas
+def remove_duplicates(in_seq, new_seq):
+    for i in in_seq:
+        if i in new_seq:
+            new_seq.remove(i)
 
 # seleciona um subconjunto da lista de clientes e o embaralha
 def scramble(s):
@@ -65,7 +89,7 @@ def inversion(s, prob_s):
     arr = None
     # try:
         # inicia um array com os id dos clientes
-    arr = np.array(s.get_sequence())
+    arr = np.array(s.id_list())
         # decide o tamanho do intervalo com base pa probalidade de mutação
     size = round(prob_s * arr.size)
         # inverte o subconjunto escolhido
@@ -97,13 +121,13 @@ def local_search(s):
         count += 1
 
 def update_solution(s, seq):
-    seq = s.get_new_client_list(seq)
+    seq = s.retrieve_list(seq)
     s.reset_solution()
     s.set_client_list(seq)
     s.initial_solution()
 
 if __name__ == '__main__':
-    inversion(2, 3)
+    print('')
     
 
 
