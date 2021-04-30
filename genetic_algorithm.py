@@ -5,24 +5,7 @@ import funcs
 
 class GeneticAlgorithm:
 
-    # calcula o fitness de cada indivíduo da populacao
-    # o calculo é feito com base na posição em que as solucoes estão e a quantidade 
-    # ranqueamento linear
-    # def fitness_function(self, pop, pop_size, off):
-    #     # sp = selective pressure [1.0 , 2.0]
-    #     sp = 1.8
-    #     qt_solution = pop_size
-    #     # o fitness é calculado
-    #     fitness = list()
-    #     for i in range(qt_solution):
-    #         value = 2 - sp + 2 * (sp - 1) * ((i - 1)/(qt_solution - 1))
-    #         fitness.append(value)
-    #     # a populacao é ordenada de forma (maior distância -> menor distância)
-    #     pop.sort_pop(True, off)
-    #     # o fitness calculado é atribuido a cada solucao da populacao
-    #     pop.set_fitness(fitness, off)
-    
-
+    # calcula a função fitness
     def fitness_function(self, c_list, p):
         sp = 1.8
         c_size = len(c_list)
@@ -33,7 +16,7 @@ class GeneticAlgorithm:
         p.sort_teste(c_list)
         p.set_fitness2(fitness, c_list)
         
-    
+        
     # a lista deve ser ordenada antes
     def tournamet_selection(self, p, c_list, k):
         # seleciona k elementso da minha lista
@@ -43,25 +26,6 @@ class GeneticAlgorithm:
         # retorna o melhor elemento
         return selected.pop()
 
-
-    
-    # Parents Selection
-    # K-Way Tournament Selection
-    # k é o número de indivíduos da população selecionados
-    # def tournamet_selection(self, pop, k):
-    #     dict_pop = {}
-    #     candidate = []
-    #     # um dicionário que relacina id com o fitness é utilizada para selecionar os pais
-    #     dict_pop = pop.get_dic()
-    #     # k amostras são selecionadas aleatoriamente dentro do dicionário
-    #     # o dicionário é ordenado e o item com maior fitness é selecionado
-    #     # uma solucao é escolhida
-    #     candidate = random.sample(dict_pop.items(), k)
-    #     candidate = sorted(candidate, key=lambda item: item[1]).pop()[0]
-    #     # com base no id a solução selecionado é recuperada
-    #     p = pop.get_item(candidate)
-    #     # a solução selecionada é retornada
-    #     return p 
 
     # Order Crossover Operator (OX)
     # Acontece com uma alta probabilidade
@@ -78,8 +42,8 @@ class GeneticAlgorithm:
             if p2.get_id() != p1.get_id():
                 break
         # recebe a ordem de visitação da solucao
-        c_p1 = funcs.get_sequence(p1)
-        c_p2 = funcs.get_sequence(p2)
+        c_p1 = p1.get_sequence()
+        c_p2 = p2.get_sequence()
         # sorteando os pontos de corte
         while True:
             c_point = random.sample(range(0, len(c_p1)), 2)
@@ -88,7 +52,9 @@ class GeneticAlgorithm:
             if c_point[0] != 0 and c_point[1] != len(c_p1) - 1: 
                 break
         # uma base é criada para os filhos (copia parcial do pai)
+        # off1
         self.get_offspring(c_p1, c_p2, c_point, pop)
+        # off2
         self.get_offspring(c_p2, c_p1, c_point, pop)
 
 
@@ -99,13 +65,13 @@ class GeneticAlgorithm:
         off_list = list()
         # seq recebe a sequencia de visitacao de p1
         seq = self.cross_sequence(p1, c_point)
-        # seq_off recebe a parte herdade de p2
+        # seq_off recebe subconjunto de p2
         seq_off = self.inherited_seq(p2, c_point)
-        # seq_off recebe a parte herdade de p1
+        # seq_off recebe a ordem de visitação de p1
         self.offspring_seq(seq_off, seq, c_point)
-        # a lista com os clientes reais é recuperada 
+        # a lista com os clientes reais é recuperada (apenas os ids estavam sendo usados)
         aux = pop.get_population()[0]
-        off_list = funcs.get_new_client_list(aux, seq_off)
+        off_list = aux.get_new_client_list(seq_off)
         # uma nova solução "filho" é criada e adicionada a populacao
         off = pop.new_solution(off_list)
         pop.add_offspring(off)
@@ -134,7 +100,7 @@ class GeneticAlgorithm:
         # o array é inicializado com X
         for i in range(len(p2)):
             in_seq.append('X')
-        # o array então rece a parte herada 
+        # o array então recebe a parte herada 
         for i in range(c_point[0], c_point[1] + 1):
             in_seq[i] = p2[i]
         return in_seq

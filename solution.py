@@ -132,7 +132,27 @@ class Solution:
     #         aux.append(self.get_client(i))
     #     return aux
     
-
+    # retorna uma lista com apenas ids dos clientes sem o depósito
+    def get_sequence(self):
+        seq = list()
+        for vehicle in self.get_vehicle_list():
+            for client in vehicle.get_route():
+                if client.get_id() != 0:
+                    seq.append(client.get_id())
+        return seq
+    
+    # retorna um cliente com base no id
+    def get_client(self, id):
+        for c in self.get_clientList():
+            if c.get_id() == id:
+                return c
+        
+# retorna clientes com base em uma lista de ids passados
+    def get_new_client_list(self, c_list):
+        aux = list()
+        for i in c_list:
+            aux.append(self.get_client(i))
+        return aux
         
     
 
