@@ -22,6 +22,14 @@ class Vehicle:
     def get_distance(self):
         return self.distance
 
+    def set_distance(self, dis):
+        self.distance = dis
+    
+    def set_route(self, r):
+        self.route.clear()
+        self.route = r[:]
+    
+
     # Acho que n preciso da cópia
     def check_route(self):
         # cria uma copia da rota
@@ -40,6 +48,7 @@ class Vehicle:
             if load > self.capacity:
                 return 0
         return 1
+          
         
     def add_client(self, client):
         # adiciona o cliente na rota
@@ -60,8 +69,13 @@ class Vehicle:
         for i in self.route:
             seq.append(i.get_id())
         return seq
-
-        
+    
+    def route_ids(self):
+        r_ids = list()
+        for i in self.route:
+            if i.get_id() != 0:
+                r_ids.append(i.get_id())
+        return r_ids        
     
     def print_vehicle(self):
         return 'vehicle id {}, capcity {}, distatance {}'.format(self.id, self.capacity, self.distance)

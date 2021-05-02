@@ -8,6 +8,9 @@ class Client:
     def __repr__(self):
         return '{}, {}, {}'.format(self.id, self.pickup, self.delivery)
     
+    # def __repr__(self):
+    #     return '{}'.format(self.id)
+    
     def get_id(self):
         return self.id
     

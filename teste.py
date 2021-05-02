@@ -1,27 +1,12 @@
-from operator import attrgetter, itemgetter
-class Point:
-
-    def __init__(self, p1):
-        self.p1 = p1
+a = [1, 2, 3, 4]
+b = ['a', 'b', 'c', 'd']
+b.insert(0, 0)
+l = [0, 3]
+m = [2, 3]
     
-    def __repr__(self):
-        return f'{self.p1}'
-    
-
-lista = []
-p1 = Point(5)    
-p2 = Point(4)    
-p3 = Point(12)
-lista.append(p1)    
-lista.append(p2)    
-lista.append(p3)
-
-for i in lista:
-    print(i)
-
-sorted(lista, key=lambda item: item[2])
-
-
-for i in lista:
-    print(i, end=' ')
-
+# for i in range(len(l)):
+#     aux = a[l[i]]
+#     a[l[i]] = b[m[i]]
+#     b[m[i]] = aux
+# print(a)
+print(b)

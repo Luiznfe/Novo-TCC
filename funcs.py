@@ -17,18 +17,19 @@ def parent_seq(p1, c_point):
         i += 1
     return new_seq
 
-# cria uma nova sequencia e aplica a parte herdada do pai2
+# cria uma nova lista contendo um subconjunto de p2
 def subset(p2, c_point):
     in_seq = []
     # o array é inicializado com X
     for i in range(len(p2)):
         in_seq.append('X')
-    # o array então recebe a parte herada 
+    # o array então recebe o subconjunto 
     for i in range(c_point[0], c_point[1] + 1):
         in_seq[i] = p2[i]
     return in_seq
 
-# o filho recebe a parte herada do p1
+# in_seq recebe os itens restantes baseados a ordem de visitação
+# de new_seq
 def off_seq(in_seq, new_seq, c_point):
     # remove os itens repetidos da lista
     remove_duplicates(in_seq, new_seq)
@@ -63,45 +64,24 @@ def scramble(s):
     update_solution(s, seq)
     return s
 
-def swap(s):
-    # pegar a sequencia da solução
-    arr = s.get_sequence()
-    values = random.sample(range(0, len(arr)), 2)
-    aux = arr[values[0]]
-    arr[values[0]] = arr[values[1]]
-    arr[values[1]] = aux
-    update_solution(s, arr)
-
-def swap_2(s):
-    arr = np.array(s.get_sequence())
-    values = random.sample(range(0, len(arr)), 4)
-    aux = arr[values[0]]
-    arr[values[0]] = arr[values[1]]
-    arr[values[1]] = aux
-    aux = arr[values[2]]
-    arr[values[2]] = arr[values[3]]
-    arr[values[3]] = aux
-    seq = list(arr)
-    update_solution(s, seq)
-
 # um subconjunto é invertido 
 def inversion(s, prob_s):
     arr = None
-    # try:
+    try:
         # inicia um array com os id dos clientes
-    arr = np.array(s.id_list())
+        arr = np.array(s.id_list())
         # decide o tamanho do intervalo com base pa probalidade de mutação
-    size = round(prob_s * arr.size)
+        size = round(prob_s * arr.size)
         # inverte o subconjunto escolhido
-    aux = random.randint(0, arr.size - size)
-    new_a = np.array(arr[aux :aux + size])
-    arr[aux : aux + size] = new_a[::-1]
+        aux = random.randint(0, arr.size - size)
+        new_a = np.array(arr[aux :aux + size])
+        arr[aux : aux + size] = new_a[::-1]
         # transforma em uma lista
-    seq = list(arr)
+        seq = list(arr)
         # atualiza a solução
-    update_solution(s, arr)
-    # except Exception:
-    #     print('mutation error')
+        update_solution(s, arr)
+    except Exception:
+        print('mutation error')
 
 def local_search(s):
     c_aux = s.get_clientList()

@@ -15,7 +15,7 @@ class Solution:
         self.fitness = 0 # fitness da solução
     
     def __repr__(self):
-        return '{}, {}, {}, age {}'.format(self.id_solution, self.dist, self.fitness)
+        return '{}, {}, {}'.format(self.id_solution, self.dist, self.fitness)
     
     def get_id(self):
         return self.id_solution
@@ -48,7 +48,7 @@ class Solution:
         self.fitness = 0
 
     #  soma um valor a distancia total
-    def total_distance(self, dist):
+    def sum_dist(self, dist):
         self.dist += dist
     
     # embaralha a lista de clientes
@@ -62,6 +62,7 @@ class Solution:
     # set fitness
     def set_fitness(self, value):
         self.fitness = value
+    
     
     # gera uma solucao inicial
     def initial_solution(self):
@@ -106,7 +107,7 @@ class Solution:
             # adiciona o veiculo contendo a rota criada na lista da solução
             self.vehicle_list.append(v)
             # soma distancia da rota criada a distancia total da solução
-            self.total_distance(v.get_distance())
+            self.sum_dist(v.get_distance())
             # incrementa 1 ao id do proximo veículo criado
             id += 1
             # print(f'distacia percorrida {v.get_distance()}')
@@ -124,17 +125,89 @@ class Solution:
     
     # retorna um cliente com base no id
     def get_client(self, id):
-        for c in self.get_clientList():
+        for c in self.client_list:
             if c.get_id() == id:
                 return c
         
-# retorna clientes com base em uma lista de ids passados
+    # retorna clientes com base em uma lista de ids passados
     def retrieve_list(self, c_list):
+        depot = Client(0, 0, 0)
+        self.client_list.append(depot)
         aux = list()
         for i in c_list:
             aux.append(self.get_client(i))
+        self.client_list.pop()
         return aux
+    
+    # adiciona o depoisto 
+    def add_depot(self, r):
+        r.insert(0, 0)
+        r.append(0)
+    
+    # calcula a distancia de uma rota
+    def check_distance_by_route(self, r):
+        r_distance = 0
+        for i in range(len(r) - 1):
+            r_distance += float(self.adj_matrix[i][i + 1])
+        return r_distance
+    
+    # calcula a distacia total das rotas 
+    def check_new_distance(self, routes):
+        new_distance = []
+        # adiciona os depoisitos
+        for i in routes:
+            self.add_depot(i)
+            new_distance.append(self.check_distance_by_route(i))
+        # retorna 1 caso a nova distancia seja menor
+        if sum(new_distance) < self.dist:
+            return new_distance
+        return 0
+    
+    # atualixa a solução com base nas novas rotas caso seja possível 
+    def update_solution(self, routes):
+        # verifica a nova distancia e retorna 0 caso seja maior que a antiga
+        # ou uma lista com a distancia das rotas
+        dis = self.check_new_distance(routes)
+        if dis == 0:
+            return 0
         
+        r_list = []
+        # recupera os clientes com suas informações
+        for i in routes:
+            r_list.append(self.retrieve_list(i))
+            
+        # cria um veículo para verificar se as rotas são possiveis
+        # ATUALIZAR OS VEICULOS
+        v_id = 0
+        aux_v_list = []
+        v = Vehicle(v_id, self.cap)
+        for i in r_list:
+            v.set_route(i)
+            # verifica se a rota é possivel
+            f = v.check_route()
+            if f == 0:
+                aux_v_list.clear()
+                # retorna zero caso n seja possivel
+                return 0
+            # adiciona o veiculo
+            aux_v_list.append(v)
+        
+        # atualiza a solução
+        self.fitness = 0
+        # atualizando a distancia das rotas
+        for i in range(len(aux_v_list)):
+            aux_v_list[i].set_distance(dis[i])
+    
+        # definindo uma novo lista de veiculos
+        self.vehicle_list = aux_v_list[:]
+        
+        # atualizando a distancia da solução
+        self.dist = sum(dis)
+        print('possivel')
+            
+        
+        
+            
     
 
                 
