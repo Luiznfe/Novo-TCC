@@ -77,5 +77,11 @@ class Vehicle:
                 r_ids.append(i.get_id())
         return r_ids        
     
+    def print_route(self):
+        aux = list()
+        for i in self.route:
+            aux.append(i.get_id())
+        print(aux)
+    
     def print_vehicle(self):
         return 'vehicle id {}, capcity {}, distatance {}'.format(self.id, self.capacity, self.distance)

@@ -135,7 +135,8 @@ class Solution:
         self.client_list.append(depot)
         aux = list()
         for i in c_list:
-            aux.append(self.get_client(i))
+            c = self.get_client(i)
+            aux.append(c)
         self.client_list.pop()
         return aux
     
@@ -175,13 +176,12 @@ class Solution:
         # recupera os clientes com suas informações
         for i in routes:
             r_list.append(self.retrieve_list(i))
-            
         # cria um veículo para verificar se as rotas são possiveis
         # ATUALIZAR OS VEICULOS
         v_id = 0
         aux_v_list = []
-        v = Vehicle(v_id, self.cap)
         for i in r_list:
+            v = Vehicle(v_id, self.cap)
             v.set_route(i)
             # verifica se a rota é possivel
             f = v.check_route()
@@ -191,6 +191,8 @@ class Solution:
                 return 0
             # adiciona o veiculo
             aux_v_list.append(v)
+            # incrementa o contador
+            v_id += 1
         
         # atualiza a solução
         self.fitness = 0
@@ -203,8 +205,14 @@ class Solution:
         
         # atualizando a distancia da solução
         self.dist = sum(dis)
-        print('possivel')
+        self.print_routes()
+        # print('rotas',routes)
             
+    def print_routes(self):
+        for i in self.vehicle_list:
+            i.print_route()
+    
+    
         
         
             
