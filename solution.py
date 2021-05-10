@@ -205,7 +205,7 @@ class Solution:
         
         # atualizando a distancia da solução
         self.dist = sum(dis)
-        self.print_routes()
+        return 1
         # print('rotas',routes)
             
     def print_routes(self):

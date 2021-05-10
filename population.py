@@ -62,17 +62,6 @@ class Population:
             self.pop.sort(key=attrgetter('dist'), reverse=arg)
         else:
             self.offspring.sort(key=attrgetter('dist'), reverse=arg)
-
-    # atribui o fitness a cada solução da populacao
-    # def set_fitness(self, fitness, off):
-    #     c_list = []
-    #     if off == 0:
-    #         c_list = self.pop
-    #     else:
-    #         c_list = self.offspring
-
-    #     for i, s in enumerate(c_list):
-    #         s.set_fitness(fitness[i])
     
     def set_fitness2(self, fitness, aux_list):
         for i, s in enumerate(aux_list):
@@ -118,7 +107,14 @@ class Population:
         for i in self.offspring:
             merged_list.append(i)
         # self.sort_teste(merged_list)
+        self.offspring.clear()
         return merged_list
+
+    
+    def best_solution(self):
+        aux = self.pop[:]
+        self.sort_d(aux)
+        print(aux[-1].get_distance())
         
     def sort_d(self, c_list):
         c_list.sort(key=attrgetter('dist'), reverse=True)

@@ -8,13 +8,29 @@ import random
 
 # fontes http://www.decom.ufop.br/marcone/Publicacoes/PRVCES-ANPET2009.pdf
 
+
+# 3.3Méto dodeDescida/SubidaRandômica
+def local_search(s, iterMax):
+    iter = 0
+    op = 0
+    while iter < iterMax:
+        iter += 1
+        op = operations(s)
+        if op == 1:
+            break
+            
+
 def operations(s):
     # apenas as rotas são passadas para as operações
     routes = retrieve_routes(s)
-    # swap (uma quantidade de elementos é trocada entre rotas)
-    s.print_routes()
+    # swap (uma quantidade de elementos é trocada entre rotascle
+    swap(routes)
+    swap_2(routes)
+    shift(routes)
     shift_2(routes)
-    s.update_solution(routes)
+    # try update solution
+    o = s.update_solution(routes)
+    return o
     
    
     
@@ -44,7 +60,8 @@ def swap(routes):
     a, b = random.sample(routes, 2)
     # k = quantidade de elementos trocados
     # 30% da quantidade de elementos da menor rota
-    k = swap_k(len(a), len(b))
+    # k = swap_k(len(a), len(b))
+    k = 1
     # selecionando os elementos que serao trocados
     l = random.sample(range(0, len(a)), k)    
     m = random.sample(range(0, len(b)), k)    
@@ -62,8 +79,11 @@ def swap_2(routes):
     a, b = random.sample(routes, 2)
     # verifica se o tamanha das rotas é maior que 2
     # sorteia o index 
-    index_a = random.randint(0, len(a) - 2)
-    index_b = random.randint(0, len(b) - 2)
+    try:
+        index_a = random.randint(0, len(a) - 2)
+        index_b = random.randint(0, len(b) - 2)
+    except :
+        return 0
         
     list_a = a[index_a], a[index_a + 1]
     list_b = b[index_b], b[index_b + 1]
@@ -94,7 +114,10 @@ def shift(routes):
 def shift_2(routes):
     a, b = random.sample(routes, 2)
     # escolha dos clientes
-    index_a = random.randint(0, len(a) - 2)
+    try:
+        index_a = random.randint(0, len(a) - 2)
+    except:
+        return 0
     list_a = a[index_a], a[index_a + 1]
     # remove os elementos de a
     a.remove(list_a[0])
@@ -102,14 +125,18 @@ def shift_2(routes):
     # adiciona em b
     b.extend(list_a)
     return 1
-        
-    
-    
-    
     
     
 if __name__ == '__main__':
-    p = Population(1)
+    p = Population(3)
     p.new_population('c0530.txt')
-    operations(p.get_population()[0])
+    for j in p.get_population():
+        print(j.get_distance())
+        
+    for i in p.get_population():
+        local_search(i, 100)
+        
+    print('NEW SOLUTIONS')
+    for j in p.get_population():
+        print(j.get_distance())
     

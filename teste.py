@@ -1,5 +1,6 @@
-import random
-a = [1, 2, 3, 4]
-l = 'a', 'b'
-a.extend(l)
-print(a)
+import time 
+print(time.time() - (time.time() + 30))
+# while True:
+#     stop = time.time()
+#     if stop - 10 == 0:
+#         break

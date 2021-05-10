@@ -49,20 +49,6 @@ def remove_duplicates(in_seq, new_seq):
         if i in new_seq:
             new_seq.remove(i)
 
-# seleciona um subconjunto da lista de clientes e o embaralha
-def scramble(s):
-    arr = np.array(s.get_sequence())
-    # sortear o intervalo, o intervalo tera um tamanho mínimo de 20% do tamanho da lista
-    # Ou deixar aleatorio    
-    while True:
-        interval = random.sample(range(0, arr.size), 2)
-        if abs(interval[0] - interval[1] > int(0.2 * arr.size)):
-            break
-    interval.sort()
-    np.random.shuffle(arr[interval[0] : interval[1]])
-    seq = list(arr)
-    update_solution(s, seq)
-    return s
 
 # um subconjunto é invertido 
 def inversion(s, prob_s):
@@ -83,22 +69,7 @@ def inversion(s, prob_s):
     except Exception:
         print('mutation error')
 
-def local_search(s):
-    c_aux = s.get_clientList()
-    aux_dist = s.get_distance()
-    count = 0
-    while True:
-        # funcs.scramble(a)
-        swap(s)
-        swap_2(s)
-        # funcs.inversion(a)
-        if s.get_distance() < aux_dist :
-            break
-        if count > 30:
-            s.reset_solution()
-            s.set_client_list(c_aux)
-            s.initial_solution()
-        count += 1
+
 
 def update_solution(s, seq):
     seq = s.retrieve_list(seq)
