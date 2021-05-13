@@ -9,7 +9,7 @@ import random
 # fontes http://www.decom.ufop.br/marcone/Publicacoes/PRVCES-ANPET2009.pdf
 
 
-# 3.3Méto dodeDescida/SubidaRandômica
+# 3.3Méto dodeDescida/Subida Randômica
 def local_search(s, iterMax):
     iter = 0
     op = 0
@@ -17,17 +17,13 @@ def local_search(s, iterMax):
         iter += 1
         op = operations(s)
         if op == 1:
-            break
+            iter = 0
             
 
 def operations(s):
-    # apenas as rotas são passadas para as operações
     routes = retrieve_routes(s)
-    # swap (uma quantidade de elementos é trocada entre rotascle
     swap(routes)
-    swap_2(routes)
     shift(routes)
-    shift_2(routes)
     # try update solution
     o = s.update_solution(routes)
     return o
@@ -54,13 +50,11 @@ def swap_k(a, b):
         k = 1
     return k
 
-# A QUANTIDE DE ROTAS ESCOLHIDAS PODE MUDAR ?
+# um elemento de a é trocado com outro elemento de b
 def swap(routes):
     # duas rotas são escolhidas 
     a, b = random.sample(routes, 2)
     # k = quantidade de elementos trocados
-    # 30% da quantidade de elementos da menor rota
-    # k = swap_k(len(a), len(b))
     k = 1
     # selecionando os elementos que serao trocados
     l = random.sample(range(0, len(a)), k)    
@@ -125,6 +119,9 @@ def shift_2(routes):
     # adiciona em b
     b.extend(list_a)
     return 1
+
+
+        
     
     
 if __name__ == '__main__':
@@ -134,7 +131,7 @@ if __name__ == '__main__':
         print(j.get_distance())
         
     for i in p.get_population():
-        local_search(i, 100)
+        local_search(i, 200)
         
     print('NEW SOLUTIONS')
     for j in p.get_population():

@@ -28,7 +28,7 @@ class Main:
         # LOCAL SEARCH
         start = time.time()
         for j in p.get_population():
-            funcs2.local_search(j, 30)
+            funcs2.local_search(j, n_ls)
         while True:
             g.fitness_function(p.get_population(), p)
         
@@ -39,11 +39,11 @@ class Main:
                     g.crossover(i, p, p_cross)
 
             for j in p.get_population():
-                funcs2.local_search(j, 30)
+                funcs2.local_search(j, n_ls)
             
             
             for f in p.get_offsprings():
-                funcs2.local_search(f, 30)
+                funcs2.local_search(f, n_ls)
         
             off_size = len(p.get_offsprings())
             # fitness dos filhos é calculado
@@ -55,7 +55,7 @@ class Main:
                     g.mutation(i, p_cross, p_mut)
                 
             for f in p.get_offsprings():
-                funcs2.local_search(f, 30)
+                funcs2.local_search(f, n_ls)
         
             g.fitness_function(p.get_offsprings(), p)
         
@@ -73,12 +73,15 @@ class Main:
         #         break
     
     def teste(self, pop_size, s):
+        # n de iterações da busca
+        n_ls = 100
         # população iniciada
+        
         g = GeneticAlgorithm()
         p = self.create_pop(pop_size)
         # LOCAL SEARCH
         for j in p.get_population():
-            funcs2.local_search(j, 30)
+            funcs2.local_search(j, n_ls)
         print('pop inicial')
         p.best_solution()
         while True:
@@ -103,10 +106,10 @@ class Main:
             g.fitness_function(p.get_offsprings(), p)
             # definida a probabilidade de mutação
             # DECIDIR A PROB DE MUTAÇÃO
-            p_mut = 0.2
+            p_mut = 0.3
             for i in p.get_offsprings():
                 if random.random() <= p_mut:
-                    g.mutation(i, p_cross, p_mut)
+                    g.mutation(i, 0.3)
             # busca local nos filhos
             for f in p.get_offsprings():
                 funcs2.local_search(f, 30)

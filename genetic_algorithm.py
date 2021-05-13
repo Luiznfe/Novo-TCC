@@ -79,8 +79,8 @@ class GeneticAlgorithm:
     # Mutação
     # Ainda preciso verificar
     # uma inversão é feita em uma faixa de tamanho proporcional PMUT
-    def mutation(self, s , PMUT, prob_s):
-        funcs.inversion(s, prob_s)
+    def mutation(self, s , p_mut):
+        funcs.inversion(s, p_mut)
 
     # Seleciona os sobreviventes da população
     # 5% elitismo
@@ -90,10 +90,12 @@ class GeneticAlgorithm:
         # calcula o fitness da nova lista
         self.fitness_function(merged_list, pop)
         temp_list = list()
+        
         # 5 % da população escolhida por elitismo
         e_size = round(0.05 * pop_size)
         for i in range(e_size):
             temp_list.append(merged_list.pop())
+            
         # 80% tournament selection / # k = 10% da populção (quantidades de amostras comparadas)
         t_size = round(0.8 * pop_size)
         k = round(len(merged_list) * 0.1)
@@ -101,9 +103,11 @@ class GeneticAlgorithm:
             c = self.tournamet_selection(pop, merged_list, k)
             merged_list.remove(c)
             temp_list.append(c)
+            
         # 15% random / ou até completar a lista
         while len(temp_list) != len(pop.get_population()):
             p = random.choice(merged_list)
             merged_list.remove(p)
             temp_list.append(p)
+    
         pop.set_population(temp_list)

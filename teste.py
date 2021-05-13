@@ -1,6 +1,9 @@
-import time 
-print(time.time() - (time.time() + 30))
+import time
+t = 2
+print(time.localtime())
+# start = time.time() 
 # while True:
+#     print('i')
 #     stop = time.time()
-#     if stop - 10 == 0:
+#     if stop == start + t:
 #         break
