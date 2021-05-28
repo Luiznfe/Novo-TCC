@@ -1,6 +1,7 @@
 from operator import attrgetter, itemgetter
 from solution import Solution
 from read import Read
+from read_2 import Read2
 import random
 import copy
 
@@ -18,6 +19,15 @@ class Population:
     def new_population(self, path):
         r = Read(path)
         cap, c_list, adj_matrix = r.create_instance()
+        for i in range(self.size):
+            s = Solution(c_list, adj_matrix, cap, i)
+            s.random_client_list()
+            s.initial_solution()
+            self.pop.append(s)
+    
+    def new_population_2(self, path):
+        r = Read2(path)
+        cap, c_list, adj_matrix = r.create_instance_2()
         for i in range(self.size):
             s = Solution(c_list, adj_matrix, cap, i)
             s.random_client_list()
@@ -80,6 +90,7 @@ class Population:
         for s in self.pop:
             print(f'{s.get_id()}, {s.get_distance()}, {s.get_fitness()}')
             
+            
     def print_offsprings(self):
         for s in self.offspring:
             print(f'{s.get_id()}, {s.get_distance()}, {s.get_fitness()}')
@@ -125,7 +136,7 @@ class Population:
 if __name__ == '__main__':
 
     p = Population(3)
-    p.new_population('c0530.txt')
+    p.new_population_2('c2.txt')
 
   
 

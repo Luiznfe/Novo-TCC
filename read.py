@@ -28,6 +28,7 @@ class Read:
         # criando uma lista de clientes
         c_list = list()
         self.create_client_list(data, c_list)
+        c_list.insert(0, Client(0, 0, 0))
         return cap, c_list, adjMatrix
     
         

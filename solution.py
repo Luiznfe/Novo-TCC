@@ -53,7 +53,10 @@ class Solution:
     
     # embaralha a lista de clientes
     def random_client_list(self):
+        a = self.client_list.pop(0)
         random.shuffle(self.client_list)
+        self.client_list.insert(0, a)
+
     
     # set novo id
     def set_id(self, new_id):
@@ -63,13 +66,18 @@ class Solution:
     def set_fitness(self, value):
         self.fitness = value
     
-    
+    def remove_depot(self):
+        for i in range(len(self.client_list)):
+            if self.client_list[i].get_id() == 0:
+                a = i 
+                break
+        return self.client_list.pop(a)
+        
     # gera uma solucao inicial
     def initial_solution(self):
-        # um deposito é criado
-        depot = Client(0, 0, 0)
         copy_client_list = list()
         copy_client_list = self.client_list[:]
+        depot = copy_client_list.pop(0)
         id = 0 # id do veiculo
         while True: # enquanto existirem clientes ainda nao atendidos
             # para se a lista estiver vazia
@@ -131,13 +139,12 @@ class Solution:
         
     # retorna clientes com base em uma lista de ids passados
     def retrieve_list(self, c_list):
-        depot = Client(0, 0, 0)
-        self.client_list.append(depot)
+        # depot = Client(0, 0, 0)
+        # self.client_list.append(depot)
         aux = list()
         for i in c_list:
             c = self.get_client(i)
             aux.append(c)
-        self.client_list.pop()
         return aux
     
     # adiciona o depoisto 
@@ -166,16 +173,18 @@ class Solution:
     
     # atualixa a solução com base nas novas rotas caso seja possível 
     def update_solution(self, routes):
+        routes_copy = copy.deepcopy(routes)
         # verifica a nova distancia e retorna 0 caso seja maior que a antiga
         # ou uma lista com a distancia das rotas
-        dis = self.check_new_distance(routes)
+        dis = self.check_new_distance(routes_copy)
         if dis == 0:
             return 0
         
         r_list = []
         # recupera os clientes com suas informações
-        for i in routes:
+        for i in routes_copy:
             r_list.append(self.retrieve_list(i))
+
         # cria um veículo para verificar se as rotas são possiveis
         # ATUALIZAR OS VEICULOS
         v_id = 0
@@ -193,7 +202,7 @@ class Solution:
             aux_v_list.append(v)
             # incrementa o contador
             v_id += 1
-        
+            
         # atualiza a solução
         self.fitness = 0
         # atualizando a distancia das rotas
@@ -206,8 +215,8 @@ class Solution:
         # atualizando a distancia da solução
         self.dist = sum(dis)
         return 1
-        # print('rotas',routes)
-            
+    
+    # Imprime as rotas
     def print_routes(self):
         for i in self.vehicle_list:
             i.print_route()

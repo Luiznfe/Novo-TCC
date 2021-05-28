@@ -1,5 +1,6 @@
 from population import Population
 import random
+from plot import Plot
 # local search
 # 1 - recebe como entrada uma solução
 # 2 - recupera as rotas (sem o deposito)
@@ -19,18 +20,24 @@ def local_search(s, iterMax):
         if op == 1:
             iter = 0
             
+def ls(s):
+    while True:
+        o = operation(s)
+        if o == 1:
+            break
 
 def operations(s):
     routes = retrieve_routes(s)
-    swap(routes)
-    shift(routes)
-    # try update solution
-    o = s.update_solution(routes)
-    return o
-    
-   
-    
-# recupera as rotas 
+    swap_1(routes)
+    op = s.update_solution(routes)
+    return op
+
+def operation(s):
+    routes = retrieve_routes(s)
+    swap_struc(s, routes)
+    return 1
+
+# recupera as rotas sem o deposito
 def retrieve_routes(s):
     routes = []
     # recupera as rotas (apenas os ids)
@@ -39,19 +46,27 @@ def retrieve_routes(s):
         routes.append(r.route_ids())
     return routes
 
-# definir a quantidade de elementos trocados entre rotas
-def swap_k(a, b):
-    k = 1
-    if a >= b:
-        k = round(b * 0.3)
-    else:
-        k = round(a * 0.3)
-    if k < 1: 
-        k = 1
-    return k
+def swap_struc(s, routes):
+    a, b = random.sample(routes, 2)
+    for i in range(len(a)):
+        for j in range(len(b)):
+            swap_test(a, b, i , j)
+            o = s.update_solution(routes)
+            if o == 1:
+                break
+        else:
+            continue
+        break
+    return 1
+            
+def swap_test(a, b, i, j):
+    aux = a[i]
+    a[i] = b[j]
+    b[j] = aux
+    return 1
 
 # um elemento de a é trocado com outro elemento de b
-def swap(routes):
+def swap_1(routes):
     # duas rotas são escolhidas 
     a, b = random.sample(routes, 2)
     # k = quantidade de elementos trocados
@@ -66,6 +81,37 @@ def swap(routes):
         b[m[i]] = aux
         
     return 1
+
+# troca dois indivíduos dentro da mesma rota
+def swap_3(routes):
+    try:
+        # seleciona uma rota
+        a = random.choice(routes)
+        # seleciona o index dos dois indivíduos trocados
+        f_index, s_index = random.sample(range(0, len(a)), 2)
+        # realiza a troca
+        aux = a[f_index]
+        a[f_index] = a[s_index]
+        a[s_index] = aux
+        return 1
+    except:
+        return 0
+    
+
+# troca um elemento de posição dentro de uma rota
+def shift_3(routes):
+    # escolhe a rota
+    try:
+        a = random.choice(routes)
+        # escolhe o index (de onde será retirado e onde será colocado)
+        r_index, i_index = random.sample(range(0, len(a)), 2)
+        # remove o elemento
+        ele = a.pop(r_index)
+        # reincere 
+        a.insert(i_index, ele)
+        return 1
+    except :
+        return 0
 
     
 # troca de dois elementso consecutivos entre rotas 
@@ -94,7 +140,7 @@ def swap_2(routes):
         
 # um cliente e transferido de uma rota para outra
 # um cliente de a é movido para b
-def shift(routes):
+def shift_1(routes):
     a, b = random.sample(routes, 2)        
     # escolhe o cliente
     c = random.choice(a)
@@ -119,21 +165,20 @@ def shift_2(routes):
     # adiciona em b
     b.extend(list_a)
     return 1
-
-
-        
-    
+             
     
 if __name__ == '__main__':
-    p = Population(3)
-    p.new_population('c0530.txt')
-    for j in p.get_population():
-        print(j.get_distance())
-        
-    for i in p.get_population():
-        local_search(i, 200)
-        
-    print('NEW SOLUTIONS')
-    for j in p.get_population():
-        print(j.get_distance())
     
+    p = Population(10)
+    p.new_population_2('c2.txt')
+    i = p.get_population()[0]
+    print(i)
+    plot = Plot(i)
+    plot.plot()
+    
+    # local_search(i, 100)
+    # print(p.get_population()[0])
+    
+    
+    
+        

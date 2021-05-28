@@ -39,7 +39,10 @@ class Vehicle:
         # para ver se nenhum ponto visitado excede a capacidade do veículo
         load = 0
         for c in copy_route:
-            load += float(c.get_delivery())
+            try:
+                load += float(c.get_delivery())
+            except :
+                print(copy_route)
         if load > self.capacity:
             return 0
         for i in copy_route:
@@ -64,12 +67,14 @@ class Vehicle:
     def sum_distance(self, dist):
         self.distance += float(dist)
     
+    
     def sequence(self):
         seq = []
         for i in self.route:
             seq.append(i.get_id())
         return seq
     
+    # retorna ids de uma rota (sem o deposito)
     def route_ids(self):
         r_ids = list()
         for i in self.route:
@@ -82,6 +87,14 @@ class Vehicle:
         for i in self.route:
             aux.append(i.get_id())
         print(aux)
+    
+    def get_corr(self):
+        x = list()
+        y = list()
+        for i in self.route:
+            x.append(i.get_x())
+            y.append(i.get_y())
+        return x, y
     
     def print_vehicle(self):
         return 'vehicle id {}, capcity {}, distatance {}'.format(self.id, self.capacity, self.distance)

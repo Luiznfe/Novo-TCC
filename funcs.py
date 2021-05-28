@@ -68,7 +68,7 @@ def inversion(s, prob_s):
         update_solution(s, arr)
     except Exception:
         print('mutation error')
-
+    
 
 
 def update_solution(s, seq):

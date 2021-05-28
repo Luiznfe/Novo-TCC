@@ -52,12 +52,12 @@ class GeneticAlgorithm:
             if c_point[0] != 0 and c_point[1] != len(c_p1) - 1: 
                 break
         # dois novos filhos são gerados
-        self.new_offspring(c_p1, c_p2, c_point, pop)
-        self.new_offspring(c_p2, c_p1, c_point, pop)
+        a = self.new_offspring(c_p1, c_p2, c_point, pop, p2)        
+        self.new_offspring(c_p2, c_p1, c_point, pop, p1)
 
 
     
-    def new_offspring(self, p1, p2, c_point, pop):
+    def new_offspring(self, p1, p2, c_point, pop, p):
         seq = list()
         off_ids = list()
         off_list = list()
@@ -68,8 +68,8 @@ class GeneticAlgorithm:
         # off_ids recebe a ordem de visitação de p1
         funcs.off_seq(off_ids, seq, c_point)
         # a lista com os clientes reais é recuperada (apenas os ids estavam sendo usados)
-        aux = pop.get_population()[0]
-        off_list = aux.retrieve_list(off_ids)
+        off_list = p.retrieve_list(off_ids)
+        off_list.insert(0, p.get_clientList()[0])   
         # uma nova solução "filho" é criada e adicionada a lista de filhos
         off = pop.new_solution(off_list)
         pop.add_offspring(off)
@@ -90,12 +90,12 @@ class GeneticAlgorithm:
         # calcula o fitness da nova lista
         self.fitness_function(merged_list, pop)
         temp_list = list()
-        
         # 5 % da população escolhida por elitismo
         e_size = round(0.05 * pop_size)
         for i in range(e_size):
-            temp_list.append(merged_list.pop())
-            
+            a = merged_list.pop()
+            temp_list.append(a)
+    
         # 80% tournament selection / # k = 10% da populção (quantidades de amostras comparadas)
         t_size = round(0.8 * pop_size)
         k = round(len(merged_list) * 0.1)

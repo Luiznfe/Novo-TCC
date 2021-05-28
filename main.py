@@ -15,75 +15,92 @@ class Main:
     def __init__(self, size, time):
         self.size = int(size)
         self.time = int(time)
-        self.teste(self.size, self.time)
+        self.teste2(self.size, self.time)
 
     def create_pop(self, size):
         p = Population(size)
-        p.new_population('c0530.txt')
+        p.new_population_2('c2.txt')
         return p
     
     def teste2(self, pop_size, s):
+        n_ls = 200
         g = GeneticAlgorithm()
         p = self.create_pop(pop_size)
-        # LOCAL SEARCH
-        start = time.time()
+        
+        for i in p.get_population():
+            funcs2.local_search(i, 100)
+            
+        g.fitness_function(p.get_population(), p)
+        
+        p_cross = 0.3  # 30%
+        f = 0
+        for i in p.get_population():
+            if random.random() <= 0.3:
+                g.crossover(i, p, p_cross)
+                
         for j in p.get_population():
             funcs2.local_search(j, n_ls)
-        while True:
-            g.fitness_function(p.get_population(), p)
-        
-            p_cross = 0.3  # 30%
-            f = 0
-            for i in p.get_population():
-                if random.random() <= 0.3:
-                    g.crossover(i, p, p_cross)
-
-            for j in p.get_population():
-                funcs2.local_search(j, n_ls)
             
-            
-            for f in p.get_offsprings():
-                funcs2.local_search(f, n_ls)
+        for f in p.get_offsprings():
+            funcs2.local_search(f, n_ls)
         
-            off_size = len(p.get_offsprings())
-            # fitness dos filhos é calculado
-            g.fitness_function(p.get_offsprings(), p)
-
-            p_mut = 0.3
-            for i in p.get_offsprings():
-                if random.random() <= p_mut:
-                    g.mutation(i, p_cross, p_mut)
-                
-            for f in p.get_offsprings():
-                funcs2.local_search(f, n_ls)
-        
-            g.fitness_function(p.get_offsprings(), p)
-        
-            g.survivior_selection(p, pop_size)
-            s -= 1 
-            if s == 0:
-                break
-        
-        stop = time.time()
-        print(stop - start)
+        # # LOCAL SEARCH
+        # start = time.time()
+        # for j in p.get_population():
+        #     funcs2.local_search(j, n_ls)
         # while True:
+        #     g.fitness_function(p.get_population(), p)
+        
+        #     p_cross = 0.3  # 30%
+        #     f = 0
+        #     for i in p.get_population():
+        #         if random.random() <= 0.3:
+        #             g.crossover(i, p, p_cross)
+
+        #     for j in p.get_population():
+        #         funcs2.local_search(j, n_ls)
             
-        #     s -= 1
+            
+        #     for f in p.get_offsprings():
+        #         funcs2.local_search(f, n_ls)
+        
+        #     off_size = len(p.get_offsprings())
+        #     # fitness dos filhos é calculado
+        #     g.fitness_function(p.get_offsprings(), p)
+
+        #     p_mut = 0.3
+        #     for i in p.get_offsprings():
+        #         if random.random() <= p_mut:
+        #             g.mutation(i, p_mut)
+                
+        #     for f in p.get_offsprings():
+        #         funcs2.local_search(f, n_ls)
+        
+        #     g.fitness_function(p.get_offsprings(), p)
+        
+        #     g.survivior_selection(p, pop_size)
+        #     s -= 1 
         #     if s == 0:
         #         break
+        
+        # stop = time.time()
+        # print(stop - start)
+        # # while True:
+            
+        # #     s -= 1
+        # #     if s == 0:
+        # #         break
     
     def teste(self, pop_size, s):
         # n de iterações da busca
         n_ls = 100
         # população iniciada
-        
         g = GeneticAlgorithm()
         p = self.create_pop(pop_size)
         # LOCAL SEARCH
         for j in p.get_population():
             funcs2.local_search(j, n_ls)
-        print('pop inicial')
-        p.best_solution()
+        #p.best_solution()
         while True:
             # fitness calculado
             g.fitness_function(p.get_population(), p)

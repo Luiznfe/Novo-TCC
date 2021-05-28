@@ -1,9 +1,27 @@
-import time
-t = 2
-print(time.localtime())
-# start = time.time() 
-# while True:
-#     print('i')
-#     stop = time.time()
-#     if stop == start + t:
-#         break
+import matplotlib.pyplot as plt
+import seaborn as sns
+  
+# line 1 points
+x1 = [1,2]
+y1 = [2,4]
+# plotting the line 1 points 
+plt.plot(x1, y1, label = "line 1")
+  
+# line 2 points
+x2 = [1,2,3, 1]
+y2 = [4,1,3, 4]
+# plotting the line 2 points 
+plt.plot(x2, y2, label = "line 2", marker='o')
+  
+# naming the x axis
+plt.xlabel('x - axis')
+# naming the y axis
+plt.ylabel('y - axis')
+# giving a title to my graph
+plt.title('Two lines on same graph!')
+  
+# show a legend on the plot
+plt.legend()
+  
+# function to show the plot
+plt.show()
