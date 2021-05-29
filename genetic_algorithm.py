@@ -52,7 +52,8 @@ class GeneticAlgorithm:
             if c_point[0] != 0 and c_point[1] != len(c_p1) - 1: 
                 break
         # dois novos filhos são gerados
-        a = self.new_offspring(c_p1, c_p2, c_point, pop, p2)        
+        a = self.new_offspring(c_p1, c_p2, c_point, pop, p2)       
+        # a.print_routes() 
         self.new_offspring(c_p2, c_p1, c_point, pop, p1)
 
 

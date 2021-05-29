@@ -15,7 +15,7 @@ class Main:
     def __init__(self, size, time):
         self.size = int(size)
         self.time = int(time)
-        self.teste2(self.size, self.time)
+        self.teste(self.size, self.time)
 
     def create_pop(self, size):
         p = Population(size)
@@ -37,12 +37,27 @@ class Main:
         for i in p.get_population():
             if random.random() <= 0.3:
                 g.crossover(i, p, p_cross)
+            
                 
         for j in p.get_population():
             funcs2.local_search(j, n_ls)
             
         for f in p.get_offsprings():
             funcs2.local_search(f, n_ls)
+        
+        a = p.get_offsprings()[0]
+        
+        p_mut = 0.3
+        for i in p.get_offsprings():
+            if random.random() <= p_mut:
+                g.mutation(i, p_mut)
+        
+        for i in p.get_population():
+            if random.random() <= p_mut:
+                g.mutation(i, p_mut)
+        
+        g.survivior_selection(p, pop_size)
+                
         
         # # LOCAL SEARCH
         # start = time.time()

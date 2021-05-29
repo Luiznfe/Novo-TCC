@@ -172,12 +172,9 @@ if __name__ == '__main__':
     p = Population(10)
     p.new_population_2('c2.txt')
     i = p.get_population()[0]
-    print(i)
-    plot = Plot(i)
-    plot.plot()
     
-    # local_search(i, 100)
-    # print(p.get_population()[0])
+    local_search(i, 100)
+    print(p.get_population()[0])
     
     
     
